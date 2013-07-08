@@ -14,12 +14,15 @@ function generate_data(sick_path_1, sick_path_2, ...
 %        test_num       - The test number (for file-writing; > 0)
 %        pose_num       - The pose number (for file-writing; > 0)
 %
-%  Out:
+%  Out:  None
 %  
-%  Desc: 
+%  Desc: Given two lidars, generate_data will collect n scans and calculate
+%        the apex of a target in regards to each lidars' coordinate frame.
 %
-%        Usage:   generate_data()
-%        Example: generate_data()
+%        Usage:   generate_data(DEV_PATH_1, DEV_PATH_2, BAUD, ...
+%                SCANS, TEST, POSE)
+%        Example: generate_data('/dev/ttyUSB0', '/dev/ttyUSB1', 38400, ...
+%                30, 1, 1)
 %
 %==========================================================================
 
