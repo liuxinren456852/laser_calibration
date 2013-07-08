@@ -1,4 +1,5 @@
-function [avg_data] =  average_scans(scans_x, scans_y, num_scans, test_no, lidar_no, pose_no)
+function [avg_data] =  average_scans(scans_x, scans_y, num_scans, ...
+    test_num, lidar_num, pose_num)
 %==========================================================================
 %==========================================================================
 %
@@ -7,26 +8,29 @@ function [avg_data] =  average_scans(scans_x, scans_y, num_scans, test_no, lidar
 %  Date: 08 July 2013
 %
 %  In:   num_scans      - Desired number of laser scans
-%        test_no        - The test number (for file-writing; > 0)
-%        lidar_no       - The laser number (either 'l1' or 'l2')
-%        pose_no        - The pose number (for file-writing; > 0)
+%        test_num        - The test number (for file-writing; > 0)
+%        lidar_num       - The laser number (either 'l1' or 'l2')
+%        pose_num        - The pose number (for file-writing; > 0)
 %
 %  Out:  avg_data - a mxn matrix containing the results of the lidar scan,
 %                   where m is the desired number of scans and n is the 
 %                   number maximum number of points found in any one scan
 %
-%  Desc:  
+%  Desc: Given a series of laser scans, average_scans computes the average
+%        scan value for each corresponding point and corrects for data
+%        lying outside of the mean+-std
+%       
 %
-%        Usage:   generate_scan(SICK_DEV_PATH, SICK_BAUD, NUM_SCANS, TEST, LIDAR, POSE)
-%        Example: generate_scan('/dev/ttyUSB0', 38400, 30, 1, 'l1', 1)
+%        Usage:   average_scans(SCANS_X, SCANS_Y, NUM_SCANS, TEST,
+%                       LIDAR, POSE)
+%        Example: average_scans(scans_x, scans_y, 30, 1, 'l1', 1)
 %
 %==========================================================================
 
 % Check for input params
 narginchk(6,6)
-
-if ~(strcmp(lidar_no, 'l1' ) || strcmp(lidar_no, 'l2'))
-    error('generate_scan:: lidar_no must be either l1 or l2');
+if ~(strcmp(lidar_num, 'l1' ) || strcmp(lidar_num, 'l2'))
+    error('generate_scan:: lidar_num must be either l1 or l2');
 end
 
 % Clear window
@@ -43,7 +47,7 @@ for i = 1:num_points
     current_x = scans_x(:,i);
     current_y = scans_y(:,i);
     
-    % Calculate mean and standard deviation of each coordinate col
+    % Calculate mean and standard deviation of each coordinate
     mean_x = mean(current_x);
     mean_y = mean(current_y);
     std_x = std(current_x);
@@ -59,10 +63,11 @@ avg_data = [avg_x ; avg_y];
 avg_data( :, all( isnan( avg_data ), 1 ) ) = [];
 avg_data( :, all( isnan( avg_data ), 2 ) ) = [];
 
-file = sprintf('%s_%d', datestr(date,'yyyymmdd'), test_no);
-dir = sprintf('~/Documents/NIST/Calibration/Data/Average/%s/', file)
+% Write averages to data file if the designated scan does not already exist
+file = sprintf('%s_%d', datestr(date,'yyyymmdd'), test_num);
+dir = sprintf('~/Documents/laser_calibration/Data/Average/%s/', file)
 if ~exist(dir,'dir'), mkdir(dir); end
-path = sprintf('%s%s_pose_%d', dir, lidar_no, pose_no)
+path = sprintf('%s%s_pose_%d', dir, lidar_num, pose_num)
 if ~exist(path,'file')
     dlmwrite(path,avg_data,'delimiter', ',','precision', 7);
 else

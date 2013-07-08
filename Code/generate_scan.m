@@ -1,4 +1,5 @@
-function [scans_x, scans_y] =  generate_scan(sick_dev_path, sick_baud, num_scans, test_no, lidar_no, pose_no)
+function [scans_x, scans_y] =  generate_scan(sick_dev_path, sick_baud, ...
+    num_scans, test_no, lidar_no, pose_no)
 %==========================================================================
 %==========================================================================
 %
@@ -16,10 +17,14 @@ function [scans_x, scans_y] =  generate_scan(sick_dev_path, sick_baud, num_scans
 %  Out:  scans_x - a mxn matrix containing the results of the lidar scan,
 %                 where m is the desired number of scans and n is the 
 %                 number maximum number of points found in any one scan
+%   
+%  Desc: Initializes a SICK LMS 200 lidar and takes n scans, converting the
+%        scan data from polar to cartesian coordinates. Overflow data is 
+%        discarded from the laser scan, eliminating the need for background
+%        subtraction
 %
-%  Desc:  
-%
-%        Usage:   generate_scan(SICK_DEV_PATH, SICK_BAUD, NUM_SCANS, TEST, LIDAR, POSE)
+%        Usage:   generate_scan(SICK_DEV_PATH, SICK_BAUD, NUM_SCANS, TEST,
+%                   LIDAR, POSE)
 %        Example: generate_scan('/dev/ttyUSB0', 38400, 30, 1, 'l1', 1)
 %
 %==========================================================================
@@ -31,7 +36,6 @@ narginchk(6,6)
 if ~(strcmp(lidar_no, 'l1' ) || strcmp(lidar_no, 'l2'))
     error('generate_scan:: lidar_no must be either l1 or l2');
 end
-
 
 % Clear window
 clc;
@@ -77,8 +81,9 @@ for i = 1:num_scans
     
 end
 
+% Save both data_x and data_y to a csv file
 file = sprintf('%s_%d', datestr(date,'yyyymmdd'), test_no);
-dir = sprintf('~/Documents/NIST/Calibration/Data/Raw/%s/', file)
+dir = sprintf('~/Documents/laser_calibration/Data/Raw/%s/', file)
 if ~exist(dir,'dir'), mkdir(dir); end
 path = sprintf('%s%s_pose_%d', dir, lidar_no, pose_no)
 if ~exist(path,'file')
