@@ -65,9 +65,9 @@ avg_data( :, all( isnan( avg_data ), 2 ) ) = [];
 
 % Write averages to data file if the designated scan does not already exist
 file = sprintf('%s_%d', datestr(date,'yyyymmdd'), test_num);
-dir = sprintf('~/Documents/laser_calibration/Data/Average/%s/', file)
+dir = sprintf('~/Documents/laser_calibration/Data/Average/%s/', file);
 if ~exist(dir,'dir'), mkdir(dir); end
-path = sprintf('%s%s_pose_%d', dir, lidar_num, pose_num)
+path = sprintf('%s%s_pose_%d', dir, lidar_num, pose_num);
 if ~exist(path,'file')
     dlmwrite(path,avg_data,'delimiter', ',','precision', 7);
 else
