@@ -1,10 +1,12 @@
 %==========================================================================
 %==========================================================================
-function [apex, i2] = calculate_apex(points, R, T)
+function [apex, i2] = calculate_apex(points, test_num, lidar_num, pose_num)
 %==========================================================================
 % Func: calculate_apex()
 % Desc: 
 %==========================================================================
+
+points = [points ; 0 0 0];
 
 % calculate magnitude of each vector of lidar points (distance between the
 % base points)
@@ -14,7 +16,9 @@ base2 = norm(points(:,2)-points(:,3));
 base3 = norm(points(:,3)-points(:,1));
 
 % Calculate the distance between the apex and each base point
-sides = [ 1/2*(2*base3^2-2*base2^2+2*base1^2)^(1/2), 1/2*(2*base2^2-2*base3^2+2*base1^2)^(1/2),  1/2*(2*base2^2+2*base3^2-2*base1^2)^(1/2)];
+sides = [ 1/2*(2*base3^2-2*base2^2+2*base1^2)^(1/2), ...
+          1/2*(2*base2^2-2*base3^2+2*base1^2)^(1/2), ...
+          1/2*(2*base2^2+2*base3^2-2*base1^2)^(1/2)];
 
 % Intersection of three spheres to find apex
 % http://www.mathworks.com/matlabcentral/newsreader/view_thread/239659
@@ -29,37 +33,18 @@ p1 = points(:,1);
 i1 = p1+u1+v; % intersection point above plane
 i2 = p1+u1-v; % intersection point below plane
 
-% Plot the two possible apex points
 C = real(i1);
-TC = [T C];
-
-no = zeros(3,1);
-no(1) = norm(points(:,1)-C);
-no(2) = norm(points(:,2)-C);
-no(3) = norm(points(:,3)-C);
-
-minNo = min(no);
-newscan = zeros(3,3);
-newscan(:,1) = (points(:,1)-C)/no(1)*minNo+C;
-newscan(:,2) = (points(:,2)-C)/no(2)*minNo+C;
-newscan(:,3) = (points(:,3)-C)/no(3)*minNo+C;
-
-m1 = [0 sqrt(2) -1]';
-m2 = [-sqrt(6)/2 -1/sqrt(2) -1]';
-m3 = [sqrt(6)/2 -1/sqrt(2) -1]';
-
-X =    newscan;
-Xhat = [m1 m2 m3];
-
-for i = 1:3
-    X(:,i) = X(:,i)-C;
-end
-
-[u,s,v] = svd(X*Xhat');
-R = v*u';
-if det(R)<0, R = v*diag([1 1 -1])*u'; end
-R';
-
 apex = C;
+
+% Write apex to data file if the designated scan does not already exist
+file = sprintf('%s_%d', datestr(date,'yyyymmdd'), test_num);
+dir = sprintf('~/Documents/laser_calibration/Data/Apex/%s/', file);
+if ~exist(dir,'dir'), mkdir(dir); end
+path = sprintf('%s%s_pose_%d', dir, lidar_num, pose_num);
+if ~exist(path,'file')
+    dlmwrite(path,apex,'delimiter', ',','precision', 7);
+else
+    error('calculate_apex:: File %s already exists', path)
+end
 
 end % function calculate_apex
