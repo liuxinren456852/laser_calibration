@@ -41,9 +41,13 @@ l1_avg = average_scans(l1_scans_x, l1_scans_y, num_scans, test_num, ...
 % l2_avg = average_scans(l2_scans_x, l2_scans_y, num_scans, test_num, ...
 %     'l2', pose_num);
 
+[l1_inter, l1_indices] = segment_lines(l1_avg)
+%l2_intersections = segment_lines(l2_avg)
+
 % Plot Results
 figure('Name','Lidar 1'); hold on; grid on;
 plot(l1_avg(1,:), l1_avg(2,:),'r*')
+plot([l1_inter(1,:)],[l1_inter(2,:)])
 
 % figure('Name','Lidar 2'); hold on; grid on;
 % plot(l2_avg(1,:), l2_avg(2,:),'g*')
