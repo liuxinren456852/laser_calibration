@@ -24,11 +24,11 @@ end
 num_points = size(points,2);
 first = points(:,1);
 last  = points(:,num_points);
-index1 = splitIndex(first, last, points)
+index1 = splitIndex(first, last, points);
 split1 = points(:,index1);
 
 % Make second splits
-index2 = splitIndex(first, split1, points(:, 1:index1))
+index2 = splitIndex(first, split1, points(:, 1:index1));
 split2 = points(:,index2);
 
 index3 = splitIndex(split1, last, points(:,index1:num_points)) + index1 -1;
@@ -46,9 +46,9 @@ function [index] = splitIndex(first,last, points)
 %==========================================================================
 
 % Fit line to first and last point
-v = last-first
-v_perp = [-v(2),v(1)]
-line = v_perp/norm(v_perp)
+v = last-first;
+v_perp = [-v(2),v(1)];
+line = v_perp/norm(v_perp);
 
 n = size(points,2);
 
