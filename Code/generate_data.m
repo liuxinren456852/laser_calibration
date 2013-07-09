@@ -41,13 +41,19 @@ l1_avg = average_scans(l1_scans_x, l1_scans_y, num_scans, test_num, ...
 % l2_avg = average_scans(l2_scans_x, l2_scans_y, num_scans, test_num, ...
 %     'l2', pose_num);
 
-[l1_inter, l1_indices] = segment_lines(l1_avg)
-%l2_intersections = segment_lines(l2_avg)
+% Using modified split-merge algorithm to calculate edges of target
+[l1_inter, l1_indices] = segment_lines(l1_avg);
+% [l2_inter, l2_indices] = segment_lines(l2_avg)
+
+% Calculate apex of target using three inner intersections
+l1_apex = calculate_apex(l1_inter(:,2:4), test_num, 'l1', pose_num);
+%l2_apex = calculate_apex(l2_inter(:,2:4), test_num, 'l2', pose_num);
 
 % Plot Results
 figure('Name','Lidar 1'); hold on; grid on;
 plot(l1_avg(1,:), l1_avg(2,:),'r*')
-plot([l1_inter(1,:)],[l1_inter(2,:)])
+plot([l1_inter(1,:)],[l1_inter(2,:)], 'go-')
+plot(l1_apex(1),l1_apex(2),'g*')
 
 % figure('Name','Lidar 2'); hold on; grid on;
 % plot(l2_avg(1,:), l2_avg(2,:),'g*')
