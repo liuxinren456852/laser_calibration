@@ -12,10 +12,10 @@ function two_lidar_simul(snoise)
 %
 %  Desc: Generates a target and applies a random transformation to this 
 %        target. Then calculates the apex of the target using two different
-%        lidar scans.
+%        lidar scans that are randomly generated about the target.
 %
-%        Usage:   lms_cart(SICK_DEV_PATH, SICK_BAUD, NUM_SCANS)
-%        Example: lms_cart('/dev/ttyUSB0', 38400, 30)
+%        Usage:   two_lidar_simul(snoise)
+%        Example: two_lidar_simul(.01)
 %
 %==========================================================================
 
@@ -98,7 +98,7 @@ end % function generateTransformation
 function drawTarget()
 %==========================================================================
 % Func: drawTarget()
-% Desc: 
+% Desc: Draws the target in its own coordinate plane
 %==========================================================================
 
 view([45 45 45])
@@ -135,8 +135,8 @@ end % function drawTarget
 function [apex, points] = generateTargetTransform(R,T,color)
 %==========================================================================
 % Func: generateTargetTransform()
-% Desc: Creates a target that has been rotated and translated by the random
-%       rotation matrix and translation vertex
+% Desc: Generates a random rotation and translation that represent a
+%       lidar's coordinate frame relative to the target's coordinate frame
 %==========================================================================
 
 view([45 45 45])
@@ -181,8 +181,10 @@ end % function generateTargetTransform
 %==========================================================================
 function [intersections] = generateLidarScan(apex,points)
 %==========================================================================
-% Func: generateScan()
-% Desc: 
+% Func: generateLidarScan()
+% Desc: Given the apex and points that represent the target, randomly
+%       select a point along each of the legs of the target to represent a 
+%       lidar scan
 %==========================================================================
 
 p1 = points(:,1);
@@ -228,8 +230,10 @@ end % function generateScan
 function graphToLidar(points, apex, I, R, T, color)
 %==========================================================================
 % Func: graphToLidar()
-% Desc: 
+% Desc: Translate the target from its own coordinate frame to a lidar's and
+%       plot the result
 %==========================================================================
+
 
 p1 = R\(points(:,1)-T);
 p2 = R\(points(:,2)-T);
@@ -260,7 +264,7 @@ end % function graphToLidar
 function graphLidar(points, apex, I, color)
 %==========================================================================
 % Func: graphToLidar()
-% Desc: 
+% Desc: Graphs the lidar's coordinate frame
 %==========================================================================
 
 p1 = points(:,1);
@@ -290,7 +294,7 @@ end % function graphToLidar
 function [apex, i2] = calculateApex(scan, R, T)
 %==========================================================================
 % Func: calculateApex()
-% Desc: 
+% Desc: Given the scan, calculate the apex of the target
 %==========================================================================
 
 % calculate magnitude of each vector of lidar scan (distance between the
@@ -358,7 +362,8 @@ end % function calculateApex
 function [guess_r, guess_t]= least_squares(p, p_hat)
 %==========================================================================
 % Func: least_squares()
-% Desc: 
+% Desc: Using a least squares algorithm, determine the optimal rotation and
+%       trasnlation between the two lidars. 
 %==========================================================================
 
 % Count the number of data points
