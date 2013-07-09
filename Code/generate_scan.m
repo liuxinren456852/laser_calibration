@@ -81,14 +81,18 @@ for i = 1:num_scans
     
 end
 
+nCols = size(data_x,2);
+data = zeros(2*num_scans,nCols);
+data(1:2:end,:) = data_x;
+data(2:2:end,:) = data_y;
+
 % Save both data_x and data_y to a csv file
 file = sprintf('%s_%d', datestr(date,'yyyymmdd'), test_no);
 dir = sprintf('~/Documents/laser_calibration/Data/Raw/%s/', file)
 if ~exist(dir,'dir'), mkdir(dir); end
 path = sprintf('%s%s_pose_%d', dir, lidar_no, pose_no)
 if ~exist(path,'file')
-    dlmwrite(path,data_x,'delimiter', ',','precision', 7);
-    dlmwrite(path,data_y,'-append','delimiter', ',','precision', 7);    
+    dlmwrite(path,data,'delimiter', ',','precision', 7);
 else
     error('generate_scan:: File %s already exists', path)
 end
