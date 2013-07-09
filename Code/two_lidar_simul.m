@@ -296,9 +296,10 @@ function [apex, i2] = calculateApex(scan, R, T)
 % calculate magnitude of each vector of lidar scan (distance between the
 % base points)
 
-base1 = norm(scan(:,1)-scan(:,2));
-base2 = norm(scan(:,2)-scan(:,3));
-base3 = norm(scan(:,3)-scan(:,1));
+scan 
+base1 = norm(scan(:,1)-scan(:,2))
+base2 = norm(scan(:,2)-scan(:,3))
+base3 = norm(scan(:,3)-scan(:,1))
 
 % Calculate the distance between the apex and each base point
 sides = [ 1/2*(2*base3^2-2*base2^2+2*base1^2)^(1/2), 1/2*(2*base2^2-2*base3^2+2*base1^2)^(1/2),  1/2*(2*base2^2+2*base3^2-2*base1^2)^(1/2)];
