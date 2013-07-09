@@ -21,9 +21,9 @@ function [avg_data] =  average_scans(scans_x, scans_y, num_scans, ...
 %        lying outside of the mean+-std
 %       
 %
-%        Usage:   average_scans(SCANS_X, SCANS_Y, NUM_SCANS, TEST,
+%  Usage:   average_scans(SCANS_X, SCANS_Y, NUM_SCANS, TEST,
 %                       LIDAR, POSE)
-%        Example: average_scans(scans_x, scans_y, 30, 1, 'l1', 1)
+%  Example: average_scans(scans_x, scans_y, 30, 1, 'l1', 1)
 %
 %==========================================================================
 

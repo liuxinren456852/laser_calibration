@@ -20,11 +20,15 @@ function generate_data(sick_path_1, sick_path_2, ...
 %        the apex of a target in regards to each lidars' coordinate frame.
 %
 %        Usage:   generate_data(DEV_PATH_1, DEV_PATH_2, BAUD, ...
-%                SCANS, TEST, POSE)
+%                   SCANS, TEST, POSE)
 %        Example: generate_data('/dev/ttyUSB0', '/dev/ttyUSB1', 38400, ...
-%                30, 1, 1)
+%                   30, 1, 1)
 %
 %==========================================================================
+
+clc;
+clf;
+close all;
 
 % Check for input params
 narginchk(6,6)
@@ -32,22 +36,22 @@ narginchk(6,6)
 % Generate laser scans from each lidar
 [l1_scans_x, l1_scans_y] = generate_scan(sick_path_1, sick_baud, ... 
     num_scans, test_num, 'l1', pose_num);
-% [l2_scans_x, l2_scans_y] = generate_scan(sick_path_2, sick_baud, ...
-%     num_scans, test_num, 'l2', pose_num);
+[l2_scans_x, l2_scans_y] = generate_scan(sick_path_2, sick_baud, ...
+    num_scans, test_num, 'l2', pose_num);
 
 % Calculate average points from n lidar scans
 l1_avg = average_scans(l1_scans_x, l1_scans_y, num_scans, test_num, ...
     'l1', pose_num);
-% l2_avg = average_scans(l2_scans_x, l2_scans_y, num_scans, test_num, ...
-%     'l2', pose_num);
+l2_avg = average_scans(l2_scans_x, l2_scans_y, num_scans, test_num, ...
+    'l2', pose_num);
 
 % Using modified split-merge algorithm to calculate edges of target
 [l1_inter, l1_indices] = segment_lines(l1_avg);
-% [l2_inter, l2_indices] = segment_lines(l2_avg)
+[l2_inter, l2_indices] = segment_lines(l2_avg);
 
 % Calculate apex of target using three inner intersections
-l1_apex = calculate_apex(l1_inter(:,2:4), test_num, 'l1', pose_num);
-%l2_apex = calculate_apex(l2_inter(:,2:4), test_num, 'l2', pose_num);
+l1_apex = calculate_apex(l1_inter(:,2:4), test_num, 'l1', pose_num)
+l2_apex = calculate_apex(l2_inter(:,2:4), test_num, 'l2', pose_num)
 
 % Plot Results
 figure('Name','Lidar 1'); hold on; grid on;
@@ -55,8 +59,10 @@ plot(l1_avg(1,:), l1_avg(2,:),'r*')
 plot([l1_inter(1,:)],[l1_inter(2,:)], 'go-')
 plot(l1_apex(1),l1_apex(2),'g*')
 
-% figure('Name','Lidar 2'); hold on; grid on;
-% plot(l2_avg(1,:), l2_avg(2,:),'g*')
+figure('Name','Lidar 2'); hold on; grid on;
+plot(l2_avg(1,:), l2_avg(2,:),'r*')
+plot([l2_inter(1,:)],[l2_inter(2,:)], 'go-')
+plot(l2_apex(1),l2_apex(2),'g*')
 
 end % function generate_data
 

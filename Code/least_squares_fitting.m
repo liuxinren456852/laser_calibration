@@ -2,8 +2,26 @@
 %==========================================================================
 function [guess_r, guess_t]= least_squares_fitting(p, p_hat)
 %==========================================================================
-% Func: least_squares()
-% Desc: 
+%
+%  File: least_squares_fitting.m
+%  Auth: Justin Cosentino
+%  Date: 08 July 2013
+%
+%  In: p -     A  number of [x, y, z] points representing the target's apex
+%              at various poses
+%      p_hat - The corresponding [x, y, z] points that represent the same
+%              apex in the second lidar's coordinate frame 
+%
+%  Out: guess_r - The optimal rotation matrix calculated by the least
+%                 squares method
+%       guess_t - The optimal translation vector calculated by the least
+%                 squares method
+%
+%  Desc: Using a least squares algorithm, calculate an optimal homogeneous
+%        transformation from one lidar's coordinate system to the other.
+%
+%  Usage: least_squares_fitting(p, p_hat)
+%
 %==========================================================================
 
 % Count the number of data points
@@ -25,4 +43,4 @@ guess_r;
 % Calculate translation
 guess_t = centroid_b - guess_r*centroid_a;
 
-end % function least_squares
+end % function least_squares_fitting

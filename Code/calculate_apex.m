@@ -2,8 +2,27 @@
 %==========================================================================
 function [apex, i2] = calculate_apex(points, test_num, lidar_num, pose_num)
 %==========================================================================
-% Func: calculate_apex()
-% Desc: 
+%==========================================================================
+%
+%  File: calculate_apex.m
+%  Auth: Justin Cosentinum
+%  Date: 08 July 2013
+%
+%  In:   points    - the points of the lidar scan that intersect with the
+%                    legs of the target
+%        test_num  - The test number (for file-writing; > 0)
+%        lidar_num - The lidar number (for file-writing; > 0)
+%        pose_num  - The pose number (for file-writing; > 0)
+%
+%  Out:  apex - the calculated apex of the target given the intersections
+%        i2   - the other possible apex of the targer - ignored because we
+%               assume that the target is in an upright position
+%  
+%  Desc: Given two lidars, generate_data will collect n scans and calculate
+%        the apex of a target in regards to each lidars' coordinate frame.
+%
+%  Usage: calculate_apex(points, test_num, lidar_num, pose_num)
+%
 %==========================================================================
 
 points = [points ; 0 0 0];
