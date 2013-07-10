@@ -58,4 +58,9 @@ which is of the form
 
     generate_data('LIDAR_PATH_1','LIDAR_PATH_2',BAUD_RATE,NUM_SCANS,TRIAL_NUM,POSE_NUM)
 
-This function will collect data and store it in the aforementioned directories. 
+This function will collect data and store it in the aforementioned directories. Upon collecting a large set of apex data, one can calculate the optimal translation and rotation between the two lidars:
+
+    [r t] = calculate_r_t()
+    
+where r is the rotation and t is the translation. This function will read all apex data stored within a trial directory within the Apex data directory and calculate the transformation using a least squares algoirthm.
+       
