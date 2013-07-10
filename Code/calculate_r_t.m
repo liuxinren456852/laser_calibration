@@ -6,11 +6,13 @@ function [R, T] =  calculate_r_t()
 %  Auth: Justin Cosentino
 %  Date: 10 July 2013
 %
-%  In:
+%  In:  none
 %
-%  Out:  
+%  Out: R - optimal rotation calculated by least squares algortthm
+%       T - optimal translation calcuated by least squares algorithm
 %   
-%  Desc: 
+%  Desc: Reads all apex data and uses this data to calculate the optimal 
+%        rotation and translation between two lidar
 %
 %        Usage:   calculate_r_t()
 %        Example: calculate_r_t()
