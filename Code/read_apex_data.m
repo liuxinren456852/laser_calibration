@@ -24,21 +24,26 @@ clc;
 
 l1_apexes = []; l2_apexes = [];
 
+% Grab apex data paths and dirs
 apex_data_path = '~/Documents/laser_calibration/Data/Apex/';
-
 tests = dir('~/Documents/laser_calibration/Data/Apex/*_*');
+
+% Iterate through each apex test subdir
 for test = tests'
     test_path = strcat(apex_data_path, test.name);
     
+    % Fetch all lidar pose files within this dir
     l1_files = dir(strcat(apex_data_path, test.name, '/l1_pose_*'));
     l2_files = dir(strcat(apex_data_path, test.name, '/l2_pose_*'));
     
+    % Compile lidar one apex data for this test
     for file = l1_files'
         file_name = file.name;
         apex = dlmread(strcat(test_path, '/',file_name), ',');
         l1_apexes = [l1_apexes apex];
     end
     
+    % Compile lidar two apex data for this test
     for file = l2_files'
         file_name = file.name;
         apex = dlmread(strcat(test_path, '/',file_name), ',');
