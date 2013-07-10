@@ -6,11 +6,13 @@ function [l1_apexes, l2_apexes] =  read_apex_data()
 %  Auth: Justin Cosentino
 %  Date: 10 July 2013
 %
-%  In:
+%  In:  none
 %
-%  Out:  
-%   
-%  Desc: 
+%  Out: l1_apexes - a 3xN matrix containing all apex data from lidar one
+%       l2_apexes - a 3xN matrix containing all apex data from lidar two
+%
+%  Desc: Iterates through all apex data and creates two 3xN matrices 
+%        containing each lidar's apex calculations
 %
 %        Usage:   read_apex_data()
 %        Example: read_apex_data()
