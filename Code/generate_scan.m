@@ -1,5 +1,5 @@
 function [scans_x, scans_y] =  generate_scan(sick_dev_path, sick_baud, ...
-    num_scans, test_no, lidar_no, pose_no)
+    num_scans, test_no, lidar_no, pose_no, write_flag)
 %==========================================================================
 %==========================================================================
 %
@@ -13,6 +13,7 @@ function [scans_x, scans_y] =  generate_scan(sick_dev_path, sick_baud, ...
 %        test_no        - The test number (for file-writing; > 0)
 %        lidar_no       - The laser number (either 'l1' or 'l2')
 %        pose_no        - The pose number (for file-writing; > 0)
+%        write_flag     - Boolean determining if data is written to file
 %
 %  Out:  scans_x - a mxn matrix containing the results of the lidar scan,
 %                 where m is the desired number of scans and n is the 
@@ -31,7 +32,7 @@ function [scans_x, scans_y] =  generate_scan(sick_dev_path, sick_baud, ...
 global data_x data_y
 
 % Check for input params
-narginchk(6,6)
+narginchk(7,7)
 
 if ~(strcmp(lidar_no, 'l1' ) || strcmp(lidar_no, 'l2'))
     error('generate_scan:: lidar_no must be either l1 or l2');
@@ -87,15 +88,17 @@ data(1:2:end,:) = data_x;
 data(2:2:end,:) = data_y;
 
 % Save both data_x and data_y to a csv file
-file = sprintf('%s_%d', datestr(date,'yyyymmdd'), test_no);
-dir = sprintf('~/Documents/laser_calibration/Data/Raw/%s/', file)
-if ~exist(dir,'dir'), mkdir(dir); end
-path = sprintf('%s%s_pose_%d', dir, lidar_no, pose_no)
-if ~exist(path,'file')
-    dlmwrite(path,data,'delimiter', ',','precision', 7);
-else
-    error('generate_scan:: File %s already exists', path)
-end
+if write_flag
+    file = sprintf('%s_%d', datestr(date,'yyyymmdd'), test_no);
+    dir = sprintf('~/Documents/laser_calibration/Data/Raw/%s/', file)
+    if ~exist(dir,'dir'), mkdir(dir); end
+    path = sprintf('%s%s_pose_%d', dir, lidar_no, pose_no)
+    if ~exist(path,'file')
+        dlmwrite(path,data,'delimiter', ',','precision', 7);
+    else
+        error('generate_scan:: File %s already exists', path)
+    end
+end 
 
 % Uninitialize the device
 clear sicklms;

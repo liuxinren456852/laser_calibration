@@ -1,6 +1,7 @@
 %==========================================================================
 %==========================================================================
-function [apex, i2] = calculate_apex(points, test_num, lidar_num, pose_num)
+function [apex, i2] = calculate_apex(points, test_num, lidar_num, ...
+    pose_num, write_flag)
 %==========================================================================
 %==========================================================================
 %
@@ -8,11 +9,12 @@ function [apex, i2] = calculate_apex(points, test_num, lidar_num, pose_num)
 %  Auth: Justin Cosentinum
 %  Date: 08 July 2013
 %
-%  In:   points    - the points of the lidar scan that intersect with the
+%  In:   points     - the points of the lidar scan that intersect with the
 %                    legs of the target
-%        test_num  - The test number (for file-writing; > 0)
-%        lidar_num - The lidar number (for file-writing; > 0)
-%        pose_num  - The pose number (for file-writing; > 0)
+%        test_num   - The test number (for file-writing; > 0)
+%        lidar_num  - The lidar number (for file-writing; > 0)
+%        pose_num   - The pose number (for file-writing; > 0)
+%        write_flag - Boolean determining if data is written to file
 %
 %  Out:  apex - the calculated apex of the target given the intersections
 %        i2   - the other possible apex of the targer - ignored because we
@@ -21,7 +23,7 @@ function [apex, i2] = calculate_apex(points, test_num, lidar_num, pose_num)
 %  Desc: Given two lidars, generate_data will collect n scans and calculate
 %        the apex of a target in regards to each lidars' coordinate frame.
 %
-%  Usage: calculate_apex(points, test_num, lidar_num, pose_num)
+%  Usage: calculate_apex(points, test_num, lidar_num, pose_num, write_flag)
 %
 %==========================================================================
 
@@ -49,21 +51,23 @@ u1 = cross(((sum(p21.^2)+sides(1)^2-sides(2)^2)*p31 - ...
     (sum(p31.^2)+sides(1)^2-sides(3)^2)*p21)/2,c)/c2;
 v = sqrt(sides(1)^2-sum(u1.^2))*c/sqrt(c2);
 p1 = points(:,1);
-i1 = p1+u1+v; % intersection point above plane
-i2 = p1+u1-v; % intersection point below plane
+i1 = p1+u1+v % intersection point above plane
+i2 = p1+u1-v % intersection point below plane
 
 C = real(i1);
 apex = C;
 
 % Write apex to data file if the designated scan does not already exist
-file = sprintf('%s_%d', datestr(date,'yyyymmdd'), test_num);
-dir = sprintf('~/Documents/laser_calibration/Data/Apex/%s/', file);
-if ~exist(dir,'dir'), mkdir(dir); end
-path = sprintf('%s%s_pose_%d', dir, lidar_num, pose_num);
-if ~exist(path,'file')
-    dlmwrite(path,apex,'delimiter', ',','precision', 7);
-else
-    error('calculate_apex:: File %s already exists', path)
+if write_flag
+    file = sprintf('%s_%d', datestr(date,'yyyymmdd'), test_num);
+    dir = sprintf('~/Documents/laser_calibration/Data/Apex/%s/', file);
+    if ~exist(dir,'dir'), mkdir(dir); end
+    path = sprintf('%s%s_pose_%d', dir, lidar_num, pose_num);
+    if ~exist(path,'file')
+        dlmwrite(path,apex,'delimiter', ',','precision', 7);
+    else
+        error('calculate_apex:: File %s already exists', path)
+    end
 end
 
 end % function calculate_apex
