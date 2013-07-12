@@ -44,4 +44,8 @@ for test = tests'
     end
 end
 
+% Plot Apexes
+plot3(l1_apexes(1,:), l1_apexes(2,:), l1_apexes(3,:),'r*'); hold on; grid on;
+plot3(l2_apexes(1,:), l2_apexes(2,:), l2_apexes(3,:),'go');
+
 end % function read_apex_data
