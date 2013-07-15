@@ -1,5 +1,4 @@
-function [avg_data] =  average_scans(scans_x, scans_y, num_scans, ...
-    test_num, lidar_num, pose_num, write_flag)
+function [avg_data] =  average_scans(scans_x, scans_y)
 %==========================================================================
 %==========================================================================
 %
@@ -7,11 +6,8 @@ function [avg_data] =  average_scans(scans_x, scans_y, num_scans, ...
 %  Auth: Justin Cosentino
 %  Date: 08 July 2013
 %
-%  In:   num_scans      - Desired number of laser scans
-%        test_num       - The test number (for file-writing; > 0)
-%        lidar_num      - The laser number (either 'l1' or 'l2')
-%        pose_num       - The pose number (for file-writing; > 0)
-%        write_flag     - Boolean determining if data is written to file
+%  In:   scans_x - All x coordinate scan data
+%        scans_y - All y coordinate scan data
 %
 %  Out:  avg_data - a mxn matrix containing the results of the lidar scan,
 %                   where m is the desired number of scans and n is the 
@@ -21,18 +17,13 @@ function [avg_data] =  average_scans(scans_x, scans_y, num_scans, ...
 %        scan value for each corresponding point and corrects for data
 %        lying outside of the mean+-std
 %       
-%
-%  Usage:   average_scans(SCANS_X, SCANS_Y, NUM_SCANS, TEST,
-%                       LIDAR, POSE, WRITE_FLAG)
-%  Example: average_scans(scans_x, scans_y, 30, 1, 'l1', 1, true)
+%  Usage:   average_scans(SCANS_X, SCANS_Y)
+%  Example: average_scans(scans_x, scans_y)
 %
 %==========================================================================
 
 % Check for input params
-narginchk(7,7)
-if ~(strcmp(lidar_num, 'l1' ) || strcmp(lidar_num, 'l2'))
-    error('generate_scan:: lidar_num must be either l1 or l2');
-end
+narginchk(2,2)
 
 % Clear window
 clc;
@@ -63,19 +54,5 @@ end
 avg_data = [avg_x ; avg_y];
 avg_data( :, all( isnan( avg_data ), 1 ) ) = [];
 avg_data( :, all( isnan( avg_data ), 2 ) ) = [];
-
-% Write averages to data file if the designated scan does not already exist
-if write_flag
-    file = sprintf('%s_%d', datestr(date,'yyyymmdd'), test_num);
-    dir = sprintf('~/Documents/laser_calibration/Data/Average/%s/', file);
-    if ~exist(dir,'dir'), mkdir(dir); end
-    path = sprintf('%s%s_pose_%d', dir, lidar_num, pose_num);
-    if ~exist(path,'file')
-        dlmwrite(path,avg_data,'delimiter', ',','precision', 7);
-    else
-        error('generate_scan:: File %s already exists', path)
-    end
-end
-
 
 end % function average_scans

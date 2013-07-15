@@ -1,5 +1,5 @@
 function [scans_x, scans_y] =  generate_scan(sick_dev_path, sick_baud, ...
-    num_scans, test_no, lidar_no, pose_no, write_flag)
+    num_scans, lidar_no)
 %==========================================================================
 %==========================================================================
 %
@@ -10,10 +10,7 @@ function [scans_x, scans_y] =  generate_scan(sick_dev_path, sick_baud, ...
 %  In:   sick_dev_path  - Sick device path
 %        sick_baud_rate - Desired baud rate of comm session
 %        num_scans      - Desired number of laser scans
-%        test_no        - The test number (for file-writing; > 0)
 %        lidar_no       - The laser number (either 'l1' or 'l2')
-%        pose_no        - The pose number (for file-writing; > 0)
-%        write_flag     - Boolean determining if data is written to file
 %
 %  Out:  scans_x - a mxn matrix containing the results of the lidar scan,
 %                 where m is the desired number of scans and n is the 
@@ -24,22 +21,23 @@ function [scans_x, scans_y] =  generate_scan(sick_dev_path, sick_baud, ...
 %        discarded from the laser scan, eliminating the need for background
 %        subtraction
 %
-%        Usage:   generate_scan(SICK_DEV_PATH, SICK_BAUD, NUM_SCANS, TEST,
-%                   LIDAR, POSE)
-%        Example: generate_scan('/dev/ttyUSB0', 38400, 30, 1, 'l1', 1)
+%        Usage:   generate_scan(SICK_DEV_PATH, SICK_BAUD, NUM_SCANS, LIDAR)
+%        Example: generate_scan('/dev/ttyUSB0', 38400, 30, 'l1')
 %
 %==========================================================================
 global data_x data_y
 
 % Check for input params
-narginchk(7,7)
+narginchk(4,4)
 
 if ~(strcmp(lidar_no, 'l1' ) || strcmp(lidar_no, 'l2'))
     error('generate_scan:: lidar_no must be either l1 or l2');
 end
 
 % Clear window
-clc;
+% clc;
+
+sprintf('Scanning w/Lidar: %s', lidar_no)
 
 % Initialize the SICK LMS 200
 init_lidar = sicklms('init', sick_dev_path, sick_baud);
@@ -55,7 +53,7 @@ for i = 1:num_scans
     if isempty(data), error('generate_scan:: no range data returned'); end
     
     % For filtering overflow (e.g. max range) values returned from LMS
-    valid_indices = data.range < 150; %overflowValue(init_lidar.meas_mode);
+    valid_indices = data.range < 200; %overflowValue(init_lidar.meas_mode);
 
     % Keep only valid (non-overflow) measurements
     data.range = data.range(valid_indices);
@@ -74,31 +72,14 @@ for i = 1:num_scans
     
     % Add converted coordinates to data matrix
     if i == 1
-        data_x = x_pos'; data_y = y_pos';
+        data_x = x_pos';
+        data_y = y_pos';
     else
         data_x = [data_x ; x_pos'];
         data_y = [data_y ; y_pos'];
     end
     
 end
-
-nCols = size(data_x,2);
-data = zeros(2*num_scans,nCols);
-data(1:2:end,:) = data_x;
-data(2:2:end,:) = data_y;
-
-% Save both data_x and data_y to a csv file
-if write_flag
-    file = sprintf('%s_%d', datestr(date,'yyyymmdd'), test_no);
-    dir = sprintf('~/Documents/laser_calibration/Data/Raw/%s/', file)
-    if ~exist(dir,'dir'), mkdir(dir); end
-    path = sprintf('%s%s_pose_%d', dir, lidar_no, pose_no)
-    if ~exist(path,'file')
-        dlmwrite(path,data,'delimiter', ',','precision', 7);
-    else
-        error('generate_scan:: File %s already exists', path)
-    end
-end 
 
 % Uninitialize the device
 clear sicklms;
