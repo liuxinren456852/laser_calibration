@@ -58,7 +58,8 @@ Matlab code used to retrieve scan data, calculate the apex of the target,
 and optimize a homogenous transformation is stored with the Code directory.
 See each file for more specific descriptions of their functionality. The
 SICK to Matlab bridge used was the sicktoolbox, which can be downloaded
-from http://sicktoolbox.sourceforge.net.
+from http://sicktoolbox.sourceforge.net. Installation and connection 
+instructions can also be found on the aforementioned webpage.
 
 Usage
 -----
