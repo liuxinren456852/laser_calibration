@@ -85,12 +85,21 @@ Once the lasers have been connected, place the target such that both wings
 and each side are within view of each lidar. At this point, run the
 following command:
 
-    generate_data('/dev/ttyUSB1','/dev/ttyUSB5', 38400, 30 , 1, 1, true)
+    generate_data('/dev/ttyUSB1','/dev/ttyUSB5', 38400, 30, 1, true)
 
 which is of the form
 
     generate_data('LIDAR_PATH_1','LIDAR_PATH_2',BAUD_RATE, NUM_SCANS, ... 
-                  TRIAL_NUM, POSE_NUM, WRITE_FLAG)
+                  TRIAL_NUM, WRITE_FLAG)
 
 This function will collect data and store it in the aforementioned 
-directories. 
+directories. Once apex data has been collected, one can calculate the 
+optimal transformation between the two lidars using:
+
+    calculate_r_t()
+
+Note: Running this command will iterate through all apex data. If you have
+data from multiple lidar positions or old data that you do not want to use
+ within your calculations, move this data into a new folder (eg. 
+"Data/Apex/Old") to ignore it.
+
