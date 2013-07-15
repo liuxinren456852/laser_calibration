@@ -39,9 +39,9 @@ for pose_num=1:1
     
     % Generate laser scans from each lidar
     [l1_scans_x, l1_scans_y] = generate_scan(sick_path_1, sick_baud, ... 
-        num_scans, test_num, 'l1', pose_num, write_flag)
+        num_scans, 'l1')
 %     [l2_scans_x, l2_scans_y] = generate_scan(sick_path_2, sick_baud, ...
-%         num_scans, test_num, 'l2', pose_num, write_flag)
+%         num_scans, 'l2')
 
     % Calculate average points from n lidar scans
     l1_avg = average_scans(l1_scans_x, l1_scans_y)
