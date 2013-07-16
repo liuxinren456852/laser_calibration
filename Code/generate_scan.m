@@ -74,7 +74,7 @@ for i = 1:num_scans
     if i == 1
         data_x = x_pos';
         data_y = y_pos';
-    else
+    elseif length(data_x) == length(x_pos')
         data_x = [data_x ; x_pos'];
         data_y = [data_y ; y_pos'];
     end

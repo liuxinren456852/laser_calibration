@@ -42,28 +42,24 @@ else
 end
 
 % Save avg x and y data
-if write_flag
-    file = sprintf('%s_%d', datestr(date,'yyyymmdd'), test_num);
-    dir = sprintf('~/Documents/laser_calibration/Data/Average/%s/', file);
-    if ~exist(dir,'dir'), mkdir(dir); end
-    path = sprintf('%s%s_pose_%d', dir, lidar_num, pose_num);
-    if ~exist(path,'file')
-        dlmwrite(path, avg_data,'delimiter', ',','precision', 7);
-    else
-        error('generate_scan:: File %s already exists', path)
-    end
+file = sprintf('%s_%d', datestr(date,'yyyymmdd'), test_num);
+dir = sprintf('~/Documents/laser_calibration/Data/Average/%s/', file);
+if ~exist(dir,'dir'), mkdir(dir); end
+path = sprintf('%s%s_pose_%d', dir, lidar_num, pose_num);
+if ~exist(path,'file')
+    dlmwrite(path, avg_data,'delimiter', ',','precision', 7);
+else
+    error('generate_scan:: File %s already exists', path)
 end
 
 % Write apex to data file if the designated scan does not already exist
-if write_flag
-    file = sprintf('%s_%d', datestr(date,'yyyymmdd'), test_num);
-    dir = sprintf('~/Documents/laser_calibration/Data/Apex/%s/', file);
-    if ~exist(dir,'dir'), mkdir(dir); end
-    path = sprintf('%s%s_pose_%d', dir, lidar_num, pose_num);
-    if ~exist(path,'file')
-        dlmwrite(path, apex,'delimiter', ',','precision', 7);
-    else
-        error('calculate_apex:: File %s already exists', path)
-    end
+file = sprintf('%s_%d', datestr(date,'yyyymmdd'), test_num);
+dir = sprintf('~/Documents/laser_calibration/Data/Apex/%s/', file);
+if ~exist(dir,'dir'), mkdir(dir); end
+path = sprintf('%s%s_pose_%d', dir, lidar_num, pose_num);
+if ~exist(path,'file')
+    dlmwrite(path, apex,'delimiter', ',','precision', 7);
+else
+    error('calculate_apex:: File %s already exists', path)
 end
 end
