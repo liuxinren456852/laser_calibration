@@ -27,7 +27,8 @@ function  write_data(lidar_num, test_num, pose_num, num_scans, ...
 
 % Save raw x and y data
 nCols = size(raw_x,2);
-data = zeros(2*num_scans,nCols);
+nRows = size(raw_x,1);
+data = zeros(2*nRows,nCols);
 data(1:2:end,:) = raw_x;
 data(2:2:end,:) = raw_y;
 

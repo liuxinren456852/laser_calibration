@@ -43,23 +43,23 @@ Raw data is stored as matrix A of X and Y data from k scans such that
     A = [scan1x ; scan1y; scan2x ; scan2y ; ... ; scankx ; scanky].
 
 Average data is stored as matrix A of X-hat and Y-hat, such that all the X
-and Y data from the k scans has been averaged and shot data has been
-ignored. This appears in the format 
+and Y data from the k scans has been averaged and data that falls outside 
+of one standard deviation of the mean has been ignored. This appears in the
+format 
 
-    A = [avg-x ; avg-y].
+    A = [avg_x ; avg_y].
 
 Lastly, Apex data is stored as a point P such that:
 
-    P = [x ; y ; z=0]
+    P = [x ; y ; z]
     
-and P represents the apex point relative to the lidar's coordinate frame
-(since we assume the lidar sits at the origin, z will always equal 0). The
-Matlab code used to retrieve scan data, calculate the apex of the target,
-and optimize a homogenous transformation is stored with the Code directory.
-See each file for more specific descriptions of their functionality. The
-SICK to Matlab bridge used was the sicktoolbox, which can be downloaded
-from http://sicktoolbox.sourceforge.net. Installation and connection 
-instructions can also be found on the aforementioned webpage.
+and P represents the apex point relative to the lidar's coordinate frame. 
+The Matlab code used to retrieve scan data, calculate the apex of the 
+target, and optimize a homogenous transformation is stored with the Code 
+directory. See each file for more specific descriptions of their 
+functionality. The SICK to Matlab bridge used was the sicktoolbox, which 
+can be downloaded from http://sicktoolbox.sourceforge.net. Installation and
+connection instructions can also be found on the aforementioned webpage.
 
 Usage
 -----

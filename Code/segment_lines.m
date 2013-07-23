@@ -1,4 +1,4 @@
-function [intersections, indices] = segment_lines(points)
+function [intersections lines] = segment_lines(points)
 %==========================================================================
 %==========================================================================
 %
@@ -10,8 +10,7 @@ function [intersections, indices] = segment_lines(points)
 %
 %  Out: intersections - a 2x5 matrix representing the points at which a
 %                       split will occur
-%       indices       - the indices of where the split occurs in reference
-%                       to the points matrix 
+
 %
 %  Desc: Using a modified split-merge algorithm with max recusrive depth of
 %        two, we segment the scan data into lines that represent the faces
@@ -41,8 +40,57 @@ split2 = points(:,index2);
 index3 = splitIndex(split1, last, points(:,index1:num_points)) + index1 -1;
 split3 = points(:,index3);
 
-indices = [1 ; index2 ; index1 ; index3 ; num_points];
-intersections = [first split2 split1 split3 last];
+% Seperate point sets based on split indices
+points_one_x = points(1,1:index2);
+points_one_y = points(2,1:index2);
+points_two_x = points(1,index2:index1);
+points_two_y = points(2,index2:index1);
+points_three_x = points(1,index1:index3);
+points_three_y = points(2,index1:index3);
+points_four_x = points(1,index3:end);
+points_four_y = points(2,index3:end);
+
+
+% Calculate lines (fitting lines to inverted data and inverting those lines
+% to account for vertical lines on wings)
+line_one   = robustfit(points_one_y, points_one_x);
+line_one(1) = -1*line_one(1)/(line_one(2)); line_one(2) = 1/(line_one(2));
+line_two   = robustfit(points_two_x, points_two_y);
+line_three = robustfit(points_three_x, points_three_y);
+line_four  = robustfit(points_four_y, points_four_x);
+line_four(1) = -1*line_four(1)/(line_four(2)); line_four(2) = 1/(line_four(2));
+
+
+
+% Calculate intersection points (used for calculating apex)
+intersect_one = intersection(line_one,line_two);
+intersect_two = intersection(line_two,line_three);
+intersect_three = intersection(line_three,line_four);
+
+% Combine intersection points and lines into arrays
+intersections = [intersect_one intersect_two intersect_three];
+lines = [line_one line_two line_three line_four];
+
+% figure(2); clf; hold on
+% line_one   = robustfit(points(1,1:index2), points(2,1:index2));
+% line_two   = robustfit(points(1,index2:index1), points(2,index2:index1));
+% line_three = robustfit(points(1,index1:index3), points(2,index1:index3));
+% line_four  = robustfit(points(1,index3:end), points(2,index3:end));
+% plot(intersections(1,:),intersections(2,:), 'k*')
+% plot(points(1,1:index2), points(2,1:index2), 'm+')
+% plot(points(1,index2:index1), points(2,index2:index1), 'b+')
+% plot(points(1,index1:index3), points(2,index1:index3), 'm+')
+% plot(points(1,index3:end), points(2,index3:end), 'b+')
+% p = points(1,1:index2);
+% plot(p, line_one(2)*p   + line_one(1), 'g-');
+% p = points(1,index2:index1);
+% plot(p, line_two(2)*p   + line_two(1),'g-');
+% p = points(1,index1:index3);
+% plot(p, line_three(2)*p + line_three(1), 'g-');
+% p = points(1,index3:end);
+% plot(p, line_four(2)*p  + line_four(1), 'g-');
+
+hold off
 
 %==========================================================================
 %==========================================================================
@@ -72,5 +120,26 @@ for i=1:n
 end
  
 end % function splitIndex
+
+
+%==========================================================================
+%==========================================================================
+function [intersect] = intersection(l1,l2)
+%==========================================================================
+% Func: intersection()
+% Desc: Given two lines, find the points of intersection
+%==========================================================================
+
+% y=ax-c
+% y=bx-d
+a = l1(2);
+c = l1(1);
+
+b = l2(2);
+d = l2(1);
+
+intersect = [(d-c)/(a-b) ; a*((d-c)/(a-b)) + c];
+    
+end % function intersection
 
 end % function segment_lines

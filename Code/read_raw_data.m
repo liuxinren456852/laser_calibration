@@ -29,4 +29,30 @@ data = dlmread(file_path, ',');
 x = data(1 : 2 : end, :);
 y = data(2 : 2 : end, :);
 
+nnd = [];
+for i = 1:length(x)
+    x_res = lillietest(x(:,i));
+    y_res = lillietest(y(:,i));
+    
+    if x_res == 0 || y_res == 0
+        nnd = [nnd i];
+    end
+
+end
+nnd
+length(x)
+
+
+nnd = [];
+for i = 1:length(x)
+    x_res = jbtest(x(:,i));
+    y_res = jbtest(y(:,i));
+    
+    if x_res == 0 || y_res == 0
+        nnd = [nnd i];
+    end
+end
+nnd
+length(x)
+
 end % function read_raw_data
