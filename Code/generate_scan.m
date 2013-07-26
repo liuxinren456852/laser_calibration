@@ -1,5 +1,5 @@
 function [scans_x, scans_y] =  generate_scan(sick_dev_path, sick_baud, ...
-    num_scans, lidar_no)
+    num_scans, lidar_no)%, bg_x, bg_y)
 %==========================================================================
 %==========================================================================
 %
@@ -28,7 +28,7 @@ function [scans_x, scans_y] =  generate_scan(sick_dev_path, sick_baud, ...
 global data_x data_y
 
 % Check for input params
-narginchk(4,4)
+%narginchk(4,4)
 
 if ~(strcmp(lidar_no, 'l1' ) || strcmp(lidar_no, 'l2'))
     error('generate_scan:: lidar_no must be either l1 or l2');
@@ -53,22 +53,21 @@ for i = 1:num_scans
     if isempty(data), error('generate_scan:: no range data returned'); end
     
     % For filtering overflow (e.g. max range) values returned from LMS
-    valid_indices = data.range < 200; %overflowValue(init_lidar.meas_mode);
-
-    % Keep only valid (non-overflow) measurements
-    data.range = data.range(valid_indices);
+%     valid_indices = data.range < 200; %overflowValue(init_lidar.meas_mode);
     
-    % If recording reflection data, keep only valid measurements
-    if ~isempty(data.reflect) 
-        data.reflect = data.reflect(valid_indices);        
-    end
+    % Keep only valid (non-overflow) measurements
+%     data.range = data.range(valid_indices);
     
     % Generate angles corresponding to range measurements
     theta = (data.fov/2:-data.res:-data.fov/2)'*pi/180;
-    theta = theta(valid_indices);
+%     theta = theta(valid_indices);
     
     % Convert polar to Cartesian coordinates 
     [x_pos y_pos] = pol2cart(theta,data.range);
+    
+    mask = (-70 < y_pos) & (y_pos < 70) & (0 < x_pos) & (x_pos < 500);
+    x_pos = x_pos(mask);
+    y_pos = y_pos(mask);
     
     % Add converted coordinates to data matrix
     if i == 1
@@ -84,8 +83,19 @@ end
 % Uninitialize the device
 clear sicklms;
 
-scans_x = data_x;
-scans_y = data_y;
+% % Background subtraction
+% diff_x = data_x - bg_x;
+% diff_y = data_y - bg_y;
+% mask_x = diff_x > 5;            % assume target is .05 m away from bg data
+% mask_y = diff_y > 5;            % assume target is .05 m away from bg data
+% scans_x = data_x(mask_x);
+% scans_y = data_y(mask_y);
+
+scans_x = data_x
+scans_y = data_y
+
+plot(scans_x, scans_y, 'k*')
+
 
 end % function generate_scan
 
