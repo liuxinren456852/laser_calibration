@@ -94,8 +94,13 @@ clear sicklms;
 scans_x = data_x
 scans_y = data_y
 
-plot(scans_x, scans_y, 'k*')
-
+clf; figure(1); hold on; grid off;
+title('Lidar Scan Data (30 Scans)');
+%ylabel('Standard Deviation (mm)');
+%rectangle('Position', [-7.5, -7.5, 15, 15], 'FaceColor', 'b')
+a=axis; 
+plot(scans_y, scans_x, 'ko')
+axis square;
 
 end % function generate_scan
 

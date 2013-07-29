@@ -53,7 +53,6 @@ points_four_y = points(2,index3:end);
 
 % Calculate lines (fitting lines to inverted data and inverting those lines
 % to account for vertical lines on wings)
-points_one_y
 line_one   = robustfit(points_one_y, points_one_x);
 line_one(1) = -1*line_one(1)/(line_one(2)); line_one(2) = 1/(line_one(2));
 line_two   = robustfit(points_two_x, points_two_y);
