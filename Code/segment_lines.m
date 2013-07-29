@@ -71,26 +71,81 @@ intersect_three = intersection(line_three,line_four);
 intersections = [intersect_one intersect_two intersect_three];
 lines = [line_one line_two line_three line_four];
 
-% figure(2); clf; hold on
-% line_one   = robustfit(points(1,1:index2), points(2,1:index2));
-% line_two   = robustfit(points(1,index2:index1), points(2,index2:index1));
-% line_three = robustfit(points(1,index1:index3), points(2,index1:index3));
-% line_four  = robustfit(points(1,index3:end), points(2,index3:end));
-% plot(intersections(1,:),intersections(2,:), 'k*')
-% plot(points(1,1:index2), points(2,1:index2), 'm+')
-% plot(points(1,index2:index1), points(2,index2:index1), 'b+')
-% plot(points(1,index1:index3), points(2,index1:index3), 'm+')
-% plot(points(1,index3:end), points(2,index3:end), 'b+')
-% p = points(1,1:index2);
-% plot(p, line_one(2)*p   + line_one(1), 'g-');
-% p = points(1,index2:index1);
-% plot(p, line_two(2)*p   + line_two(1),'g-');
-% p = points(1,index1:index3);
-% plot(p, line_three(2)*p + line_three(1), 'g-');
-% p = points(1,index3:end);
-% plot(p, line_four(2)*p  + line_four(1), 'g-');
+% figure(3); hold on; grid off; axis square;
+% title('Lidar Scan Data (Average)');
+% plot(points(2,:), points(1,:), 'ko')
+% plot([points(2,1), points(2,end)], [points(1,1), points(1,end)], 'r-', 'LineWidth', 2);
+% hold off;
 
-hold off
+% figure(3); hold on; grid off; axis square;
+% title('Lidar Scan Data (Average)');
+% plot(points(2,:), points(1,:), 'ko')
+% plot([points(2,1), points(2,end)], [points(1,1), points(1,end)], 'r-', 'LineWidth', 2);
+% hold off;
+% 
+% figure(1); hold on; grid off; axis square;
+% title('Lidar Scan Data (Average)');
+% plot(points(2,:), points(1,:), 'ko')
+% plot([points(2,1), points(2,end)], [points(1,1), points(1,end)], 'r-', 'LineWidth', 2);
+% plot(split1(2,1), split1(1,1), 'r*')
+% hold off;
+% 
+% figure(5); hold on; grid off; axis square;
+% title('Lidar Scan Data (Average)');
+% plot(points(2,1:index1), points(1,1:index1), 'ko')
+% plot(points(2,index1:end), points(1,index1:end), 'bo')
+% hold off;
+% 
+% figure(4); hold on; grid off; axis square;
+% title('Lidar Scan Data (Average)');
+% plot(points(2,1:index1), points(1,1:index1), 'ko')
+% plot(points(2,index1:end), points(1,index1:end), 'bo')
+% plot([points(2,1), split1(2,1)], [points(1,1), split1(1,1)], 'r-', 'LineWidth', 2);
+% plot([split1(2,1), points(2,end)],[split1(1,1), points(1,end)], 'r-', 'LineWidth', 2)
+% hold off;
+% 
+% figure(2); hold on; grid off; axis square;
+% title('Lidar Scan Data (Average)');
+% plot(points(2,1:index1), points(1,1:index1), 'ko')
+% plot(points(2,index1:end), points(1,index1:end), 'bo')
+% plot([points(2,1), split1(2,1)], [points(1,1), split1(1,1)], 'r-', 'LineWidth', 2);
+% plot([split1(2,1), points(2,end)],[split1(1,1), points(1,end)], 'r-', 'LineWidth', 2)
+% plot(split1(2,1), split1(1,1), 'r*')
+% plot(split2(2,1), split2(1,1), 'r*')
+% plot(split3(2,1), split3(1,1), 'r*')
+% hold off;
+% 
+% figure(6); hold on; grid off; axis square;
+% title('Lidar Scan Data (Average)');
+% plot(points(2,1:index2), points(1,1:index2), 'ko')
+% plot(points(2,index2:index1), points(1,index2:index1), 'mo')
+% plot(points(2,index1:index3), points(1,index1:index3), 'bo')
+% plot(points(2,index3:end), points(1,index3:end), 'go')
+% hold off;
+% 
+% figure(7); hold on; grid off; axis square; ylim([30, 70]); xlim([-50,50])
+% title('Lidar Scan Data (Average)');
+% plot(points(2,1:index2), points(1,1:index2), 'ko')
+% plot(points(2,index2:index1), points(1,index2:index1), 'mo')
+% plot(points(2,index1:index3), points(1,index1:index3), 'bo')
+% plot(points(2,index3:end), points(1,index3:end), 'go')
+% p = [min(points_one_y)-10:max(points_one_y)+10];
+% plot(p, (1/line_one(2))*p   - line_one(1)/line_one(2), 'r-', 'LineWidth', 2)
+% p = [min(points_two_y)-10:max(points_two_y)+10];
+% plot(p, (1/line_two(2))*p   - line_two(1)/line_two(2),'r-', 'LineWidth', 2)
+% p = [min(points_three_y)-10:max(points_three_y)+10];
+% plot(p, (1/line_three(2))*p - line_three(1)/line_three(2), 'r-', 'LineWidth', 2)
+% p = [min(points_four_y)-10:max(points_four_y)+10];
+% plot(p, (1/line_four(2))*p  - line_four(1)/line_four(2), 'r-', 'LineWidth', 2)
+% hold off;
+% 
+% figure(8); hold on; grid off; axis square;
+% title('Lidar Scan Data (Average)');
+% plot(points(2,:), points(1,:), 'ko')
+% plot(intersect_one(2,1), intersect_one(1,1), 'r*')
+% plot(intersect_two(2,1), intersect_two(1,1), 'r*')
+% plot(intersect_three(2,1), intersect_three(1,1), 'r*')
+% hold off;
 
 %==========================================================================
 %==========================================================================
