@@ -55,12 +55,4 @@ avg_data = [avg_x ; avg_y];
 avg_data( :, all( isnan( avg_data ), 1 ) ) = [];
 avg_data( :, all( isnan( avg_data ), 2 ) ) = [];
 
-clf; figure(1); hold on; grid off;
-title('Lidar Scan Data (Average)');
-%ylabel('Standard Deviation (mm)');
-%rectangle('Position', [-7.5, -7.5, 15, 15], 'FaceColor', 'b')
-a=axis; 
-plot(avg_y, avg_x, 'ko')
-axis square;
-
 end % function average_scans
