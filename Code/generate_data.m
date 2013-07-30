@@ -39,9 +39,9 @@ for pose_num=1:5
     
     % Generate laser scans from each lidar
     [l1_scans_x, l1_scans_y] = generate_scan(sick_path_1, sick_baud, ... 
-        num_scans, 'l1');%, bg_l1_x, bg_l1_y);
+        num_scans, 'l1');
 %     [l2_scans_x, l2_scans_y] = generate_scan(sick_path_2, sick_baud, ...
-%         num_scans, 'l2');%, bg_l2_x, bg_l2_y);
+%         num_scans, 'l2');
 
     % Calculate average points from n lidar scans
     l1_avg = average_scans(l1_scans_x, l1_scans_y);
@@ -63,7 +63,7 @@ for pose_num=1:5
     plot([l1_inter(1,:)],[l1_inter(2,:)], 'g*')
     plot(l1_apex(1),l1_apex(2),'g*')   
     title('Lidar 1');
-%     axis([0 150 -75 75]);
+    axis square;
     axis normal;
 
 %     subplot(1, 2, 2);
@@ -72,7 +72,7 @@ for pose_num=1:5
 %     plot([l2_inter(1,:)],[l2_inter(2,:)], 'g*')
 %     plot(l2_apex(1),l2_apex(2),'g*')
 %     title('Lidar 2');
-%     axis([0 150 -75 75]);
+%     axis square;
 %     axis normal;
    
     % Write all data to csv files
