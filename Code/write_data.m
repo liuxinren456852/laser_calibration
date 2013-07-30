@@ -20,8 +20,8 @@ function  write_data(lidar_num, test_num, pose_num, num_scans, ...
 %   
 %  Desc: Writes all data to file system
 %
-%        Usage:   write_data()
-%        Example: write_data()
+%        Usage:   write_data(lidar_num, test_num, pose_num, num_scans, ...
+%                            raw_x, raw_y, avg_data, apex)
 %
 %==========================================================================
 

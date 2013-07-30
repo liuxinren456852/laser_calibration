@@ -11,10 +11,12 @@ function read_avg_data()
 %  Out: avg_x - x coordinate data read from file
 %       avg_y - y coordinate data read from file
 %   
-%  Desc: Reads average data and recomputes apex points
+%  Desc: Reads average data and recomputes apex points, saving them to
+%        Data/Apex/. Correpsonding apex points for each avg data set must
+%        not currently exist within that folder, and should be moved or
+%        removed before reading all averages. 
 %
 %        Usage:   read_avg_data()
-%        Example: read_avg_data()
 %
 %==========================================================================
 

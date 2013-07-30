@@ -11,11 +11,13 @@ function [l1_apexes, l2_apexes] =  read_apex_data()
 %  Out: l1_apexes - a 3xN matrix containing all apex data from lidar one
 %       l2_apexes - a 3xN matrix containing all apex data from lidar two
 %
-%  Desc: Iterates through all apex data and creates two 3xN matrices 
-%        containing each lidar's apex calculations
+%  Desc: Iterates through all apex data  stored within Data/Apex and  
+%        creates two 3xN matrices containing each lidar's apex
+%        calculations. If you wish to ignore certain apex caluclations,
+%        move them to a subfolder or remove them from the Data/Apex
+%        directory.
 %
 %        Usage:   read_apex_data()
-%        Example: read_apex_data()
 %
 %==========================================================================
 
@@ -50,9 +52,5 @@ for test = tests'
         l2_apexes = [l2_apexes apex];
     end
 end
-
-% Plot Apexes
-% plot3(l1_apexes(1,:), l1_apexes(2,:), l1_apexes(3,:),'r*'); hold on; grid on;
-% plot3(l2_apexes(1,:), l2_apexes(2,:), l2_apexes(3,:),'go');
 
 end % function read_apex_data

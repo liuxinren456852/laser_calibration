@@ -18,15 +18,11 @@ function [avg_data] =  average_scans(scans_x, scans_y)
 %        lying outside of the mean+-std
 %       
 %  Usage:   average_scans(SCANS_X, SCANS_Y)
-%  Example: average_scans(scans_x, scans_y)
 %
 %==========================================================================
 
 % Check for input params
 narginchk(2,2)
-
-% Clear window
-clc;
 
 num_points = size(scans_x,2);
 if (num_points ~= size(scans_y,2))

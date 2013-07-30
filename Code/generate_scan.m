@@ -1,5 +1,5 @@
 function [scans_x, scans_y] =  generate_scan(sick_dev_path, sick_baud, ...
-    num_scans, lidar_no)%, bg_x, bg_y)
+    num_scans, lidar_no)
 %==========================================================================
 %==========================================================================
 %
@@ -34,9 +34,6 @@ if ~(strcmp(lidar_no, 'l1' ) || strcmp(lidar_no, 'l2'))
     error('generate_scan:: lidar_no must be either l1 or l2');
 end
 
-% Clear window
-% clc;
-
 sprintf('Scanning w/Lidar: %s', lidar_no)
 
 % Initialize the SICK LMS 200
@@ -64,8 +61,12 @@ for i = 1:num_scans
     
     % Convert polar to Cartesian coordinates 
     [x_pos y_pos] = pol2cart(theta,data.range);
-    
-    mask = (-70 < y_pos) & (y_pos < 70) & (0 < x_pos) & (x_pos < 500);
+    if strcmp(lidar_no, 'l1' )
+       mask = (-170 < y_pos) & (y_pos < 70) & (30 < x_pos) & (x_pos < 300);
+    else
+       mask = (-70 < y_pos) & (y_pos < 170) & (50 < x_pos) & (x_pos < 320);
+    end
+
     x_pos = x_pos(mask);
     y_pos = y_pos(mask);
     
@@ -83,8 +84,10 @@ end
 % Uninitialize the device
 clear sicklms;
 
-scans_x = data_x
-scans_y = data_y
+scans_x = data_x;
+scans_y = data_y;
+
+% plot(scans_y, scans_x, 'ko')
 
 end % function generate_scan
 

@@ -1,5 +1,5 @@
 function generate_data(sick_path_1, sick_path_2, sick_baud, num_scans, ...
-    test_num, write_flag)%, bg_l1_x, bg_l1_y, bg_l2_x, bg_l2_y)
+    test_num, write_flag)
 %==========================================================================
 %==========================================================================
 %
@@ -40,20 +40,20 @@ for pose_num=1:5
     % Generate laser scans from each lidar
     [l1_scans_x, l1_scans_y] = generate_scan(sick_path_1, sick_baud, ... 
         num_scans, 'l1');
-%     [l2_scans_x, l2_scans_y] = generate_scan(sick_path_2, sick_baud, ...
-%         num_scans, 'l2');
+    [l2_scans_x, l2_scans_y] = generate_scan(sick_path_2, sick_baud, ...
+        num_scans, 'l2');
 
     % Calculate average points from n lidar scans
     l1_avg = average_scans(l1_scans_x, l1_scans_y);
-%     l2_avg = average_scans(l2_scans_x, l2_scans_y);
+    l2_avg = average_scans(l2_scans_x, l2_scans_y);
 
     % Using modified split-merge algorithm to calculate edges of target
     [l1_inter l1_lines] = segment_lines(l1_avg);
-%     [l2_inter l2_lines] = segment_lines(l2_avg);
+    [l2_inter l2_lines] = segment_lines(l2_avg);
 
     % Calculate apex of target using three inner intersections
     l1_apex = calculate_apex(l1_inter)
-%     l2_apex = calculate_apex(l2_inter)
+    l2_apex = calculate_apex(l2_inter)
     
     % Plot data
     figure(1)
@@ -66,21 +66,21 @@ for pose_num=1:5
     axis square;
     axis normal;
 
-%     subplot(1, 2, 2);
-%     hold on; grid on;
-%     plot(l2_avg(1,:), l2_avg(2,:),'kx')
-%     plot([l2_inter(1,:)],[l2_inter(2,:)], 'g*')
-%     plot(l2_apex(1),l2_apex(2),'g*')
-%     title('Lidar 2');
-%     axis square;
-%     axis normal;
+    subplot(1, 2, 2);
+    hold on; grid on;
+    plot(l2_avg(1,:), l2_avg(2,:),'kx')
+    plot([l2_inter(1,:)],[l2_inter(2,:)], 'g*')
+    plot(l2_apex(1),l2_apex(2),'g*')
+    title('Lidar 2');
+    axis square;
+    axis normal;
    
     % Write all data to csv files
     if write_flag
          write_data('l1', test_num, pose_num, num_scans, ...
                     l1_scans_x, l1_scans_y, l1_avg, l1_apex)
-%          write_data('l2', test_num, pose_num, num_scans, ...
-%                     l2_scans_x, l2_scans_y, l2_avg, l2_apex)
+         write_data('l2', test_num, pose_num, num_scans, ...
+                    l2_scans_x, l2_scans_y, l2_avg, l2_apex)
     end 
     
     pause(1)

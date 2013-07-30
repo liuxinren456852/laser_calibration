@@ -25,30 +25,30 @@ clc; close all; clf;
 yaw = []; pitch = []; row=[]; ts= [];
 
 % Rotation and translation std
-r = []; t = [];
+std_r = []; std_t = []; m_r = []; m_t = [];
 
 % Possible number of poses
 numPoses = size(l1_apexes,2)/5;
-possible_poses = [1:numPoses];
+possible_poses = 1:numPoses;
 
 % Iterate to max num calcuating the std for the optimal r and t for the
 % given number of apex points
 for numPoints = 3:maxNum
     
-    disp(sprintf('%d Apex Point(s)', numPoints));
+    fprintf('%d Apex Point(s)\n', numPoints);
     
     % Select X poses randomly
     poses = possible_poses(randperm(numPoses,numPoints));
     
     % Selecting a random scan from each pose, calcuate the optimal R and T
     % using the X number of poses i t'Standard Deviation'imes
-    for i=1:5000
+    for i=1:1000
         apex_1 = []; apex_2 = [];
 
         for j=1:numPoints
             num = randi([1,5]) + (poses(j)-1)*5;
             apex_1 = [apex_1 l1_apexes(:, 1*num)];
-            apex_2 = [apex_2 l2_apexes(:, 1*num)];
+            apex_2 = [apex_2 l2_apexes(:, 1*num)];  
         end 
 
         [R,T] = least_squares_fitting(apex_1, apex_2);
@@ -57,7 +57,6 @@ for numPoints = 3:maxNum
         pitch = [pitch angles(2)];
         row = [row angles(3)];
         ts = [ts T];
-        
     end
     
     % Find the standard deviation of the optimal Rs and Ts
@@ -65,37 +64,69 @@ for numPoints = 3:maxNum
     std_pitch = std(pitch)*180/pi;
     std_row = std(row)*180/pi;
     std_T = [std(ts(1,:)) ; std(ts(2,:)) ; std(ts(3,:))]';
-    res = [std_yaw std_pitch std_row];
-    % m_yaw = mean(yaw)*180/pi;
-    % m_pitch = mean(pitch)*180/pi;
-    % m_row = mean(row)*180/pi;
-    % m_T = [mean(ts(1,:)) ; mean(ts(2,:)) ; mean(ts(3,:))]
-    % res = [m_yaw m_pitch m_row]
+    std_res = [std_yaw std_pitch std_row];
+        
+    std_r = [std_r ; std_res];
+    std_t = [std_t ; std_T];
+    
+    m_yaw = mean(yaw)*180/pi;
+    m_pitch = mean(pitch)*180/pi;
+    m_row = mean(row)*180/pi;
+    m_T = [mean(ts(1,:)) ; mean(ts(2,:)) ; mean(ts(3,:))]';
+    m_res = [m_yaw m_pitch m_row];
 
+    m_r = [m_r ; m_res];
+    m_t = [m_t ; m_T];
+    
     yaw = []; pitch = []; row=[]; ts= [];
-    r = [r ; res];
-    t = [t ; std_T];
+
+    
 end
 
-% Plot standard deviation
+% Plot standard deviation (Rotation)
+subplot(2, 2, 1);
 hold on; grid on;
+plot([3:maxNum], std_r(:,1), 'r-*')
+plot([3:maxNum], std_r(:,2), 'b-*')
+plot([3:maxNum], std_r(:,3), 'g-*')
+legend('yaw', 'pitch', 'roll')
 title('Rotation Standard Deviation');
 ylabel('Standard Deviation (Degrees)');
 xlabel('Apex Points');
-plot([3:maxNum], r(:,1), 'r-*')
-plot([3:maxNum], r(:,2), 'b-*')
-plot([3:maxNum], r(:,3), 'g-*')
-legend('yaw', 'pitch', 'roll')
 
-% Plot standard deviation
-figure(); hold on; grid on;
-title('Translation Standard Deviation');
+% Plot standard deviation (Translation)
+subplot(2, 2, 2);
+hold on; grid on;
+plot([3:maxNum], std_t(:,1), 'r-*')
+plot([3:maxNum], std_t(:,2), 'b-*')
+plot([3:maxNum], std_t(:,3), 'g-*')
 ylabel('Standard Deviation (mm)');
 xlabel('Apex Points');
-plot([3:maxNum], t(:,1), 'r-*')
-plot([3:maxNum], t(:,2), 'b-*')
-plot([3:maxNum], t(:,3), 'g-*')
-legend('x', 'y', 'z')
+title('Translation Standard Deviation');
+legend('x', 'y', 'z');
+
+% Plot mean (Rotation)
+subplot(2, 2, 3);
+hold on; grid on;
+plot([3:maxNum], m_r(:,1), 'r-*')
+plot([3:maxNum], m_r(:,2), 'b-*')
+plot([3:maxNum], m_r(:,3), 'g-*')
+legend('yaw', 'pitch', 'roll')
+title('Rotation Mean');
+ylabel('Mean (Degrees)');
+xlabel('Apex Points');
+
+% Plot mean (Translation)
+subplot(2, 2, 4);
+hold on; grid on;
+plot([3:maxNum], m_t(:,1), 'r-*')
+plot([3:maxNum], m_t(:,2), 'b-*')
+plot([3:maxNum], m_t(:,3), 'g-*')
+ylabel('Mean (mm)');
+xlabel('Apex Points');
+title('Translation Mean');
+legend('x', 'y', 'z');
+
 
 end % function calculate_r_t
 

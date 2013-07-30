@@ -60,8 +60,6 @@ line_three = robustfit(points_three_x, points_three_y);
 line_four  = robustfit(points_four_y, points_four_x);
 line_four(1) = -1*line_four(1)/(line_four(2)); line_four(2) = 1/(line_four(2));
 
-
-
 % Calculate intersection points (used for calculating apex)
 intersect_one = intersection(line_one,line_two);
 intersect_two = intersection(line_two,line_three);
@@ -70,6 +68,62 @@ intersect_three = intersection(line_three,line_four);
 % Combine intersection points and lines into arrays
 intersections = [intersect_one intersect_two intersect_three];
 lines = [line_one line_two line_three line_four];
+
+%==========================================================================
+%==========================================================================
+function [index] = splitIndex(first,last, points)
+%==========================================================================
+% Func: splitIndex()
+% Desc: Given a series of points and the first and last point of that
+%       series, calculate the point that is farthest from the line
+%       represented by the first and last point.
+%==========================================================================
+
+% Fit line to first and last point
+v = last-first;
+v_perp = [-v(2),v(1)];
+line = v_perp/norm(v_perp);
+
+n = size(points,2);
+
+maxDistance = 0; index = 0;
+for i=1:n
+    currentPoint = points(:,i);
+    distance = dot(line, currentPoint-first);
+    if abs(distance) > maxDistance
+        maxDistance = abs(distance);
+        index = i;
+    end
+end
+ 
+end % function splitIndex
+
+
+%==========================================================================
+%==========================================================================
+function [intersect] = intersection(l1,l2)
+%==========================================================================
+% Func: intersection()
+% Desc: Given two lines, find the points of intersection
+%==========================================================================
+
+% y=ax-c
+% y=bx-d
+a = l1(2);
+c = l1(1);
+
+b = l2(2);
+d = l2(1);
+
+intersect = [(d-c)/(a-b) ; a*((d-c)/(a-b)) + c];
+    
+end % function intersection
+
+end % function segment_lines
+
+
+
+%%% DATA PLOT FOR PRESENTATION - WILL REMOVE LATER %%%
 
 % figure(3); hold on; grid off; axis square;
 % title('Lidar Scan Data (Average)');
@@ -147,54 +201,3 @@ lines = [line_one line_two line_three line_four];
 % plot(intersect_three(2,1), intersect_three(1,1), 'r*')
 % hold off;
 
-%==========================================================================
-%==========================================================================
-function [index] = splitIndex(first,last, points)
-%==========================================================================
-% Func: splitIndex()
-% Desc: Given a series of points and the first and last point of that
-%       series, calculate the point that is farthest from the line
-%       represented by the first and last point.
-%==========================================================================
-
-% Fit line to first and last point
-v = last-first;
-v_perp = [-v(2),v(1)];
-line = v_perp/norm(v_perp);
-
-n = size(points,2);
-
-maxDistance = 0; index = 0;
-for i=1:n
-    currentPoint = points(:,i);
-    distance = dot(line, currentPoint-first);
-    if abs(distance) > maxDistance
-        maxDistance = abs(distance);
-        index = i;
-    end
-end
- 
-end % function splitIndex
-
-
-%==========================================================================
-%==========================================================================
-function [intersect] = intersection(l1,l2)
-%==========================================================================
-% Func: intersection()
-% Desc: Given two lines, find the points of intersection
-%==========================================================================
-
-% y=ax-c
-% y=bx-d
-a = l1(2);
-c = l1(1);
-
-b = l2(2);
-d = l2(1);
-
-intersect = [(d-c)/(a-b) ; a*((d-c)/(a-b)) + c];
-    
-end % function intersection
-
-end % function segment_lines
