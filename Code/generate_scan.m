@@ -83,24 +83,8 @@ end
 % Uninitialize the device
 clear sicklms;
 
-% % Background subtraction
-% diff_x = data_x - bg_x;
-% diff_y = data_y - bg_y;
-% mask_x = diff_x > 5;            % assume target is .05 m away from bg data
-% mask_y = diff_y > 5;            % assume target is .05 m away from bg data
-% scans_x = data_x(mask_x);
-% scans_y = data_y(mask_y);
-
 scans_x = data_x
 scans_y = data_y
-
-clf; figure(1); hold on; grid off;
-title('Lidar Scan Data (30 Scans)');
-%ylabel('Standard Deviation (mm)');
-%rectangle('Position', [-7.5, -7.5, 15, 15], 'FaceColor', 'b')
-a=axis; 
-plot(scans_y, scans_x, 'ko')
-axis square;
 
 end % function generate_scan
 
