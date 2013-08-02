@@ -35,8 +35,8 @@ for test = tests'
     test_path = strcat(apex_data_path, test.name);
     
     % Fetch all lidar pose files within this dir
-    l1_files = dir(strcat(apex_data_path, test.name, '/l1_pose_*'));
-    l2_files = dir(strcat(apex_data_path, test.name, '/l2_pose_*'));
+    l1_files = dir(strcat(apex_data_path, test.name, '/l1_pose*'));
+    l2_files = dir(strcat(apex_data_path, test.name, '/l2_pose*'));
     
     % Compile lidar one apex data for this test
     for file = l1_files'

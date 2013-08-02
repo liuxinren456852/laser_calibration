@@ -78,6 +78,12 @@ for numPoints = 3:maxNum
     m_r = [m_r ; m_res];
     m_t = [m_t ; m_T];
     
+    if numPoints == 10
+        ten_m_r = m_res
+        ten_m_t = m_T
+    end 
+        
+    
     yaw = []; pitch = []; row=[]; ts= [];
 
     
@@ -127,6 +133,15 @@ xlabel('Apex Points');
 title('Translation Mean');
 legend('x', 'y', 'z');
 
+figure(2)
+plot3(l1_apexes(1,:), l1_apexes(2,:), l1_apexes(3,:),'r*'); hold on; grid on;
+plot3(l2_apexes(1,:), l2_apexes(2,:), l2_apexes(3,:),'g*');
+
+figure(3)
+[R,T] = least_squares_fitting(l1_apexes, l2_apexes);
+l2_transform = R'*(l2_apexes - repmat(T,1,length(l2_apexes)));
+plot3(l1_apexes(1,:), l1_apexes(2,:), l1_apexes(3,:),'r*'); hold on; grid on;
+plot3(l2_transform(1,:), l2_transform(2,:), l2_transform(3,:),'g*');
 
 end % function calculate_r_t
 
@@ -139,34 +154,31 @@ ang(2) = atan2(-R(3,1),sqrt(R(3,2)^2+R(3,3)^2));
 ang(3) = atan2(R(3,2),R(3,3));
 end
 
-% for i=1:10000
-%     apex_1 = []; apex_2 = [];
+
+% fprintf('===========================================================\n')
 % 
-%     for j=1:length(l1_apexes)/5
-%         num = randi([1,5]) * j;
-%         apex_1 = [apex_1 l1_apexes(:, 1*num)];
-%         apex_2 = [apex_2 l2_apexes(:, 1*num)];  
-%     end 
+% [R,T] = least_squares_fitting(l1_apexes(:,25:75), l2_apexes(:,25:75));
+% angles = rot2ang(R);
+% yaw = angles(1)*180/pi;
+% pitch = angles(2)*180/pi;
+% row = angles(3)*180/pi;
+% fprintf('yaw : %.10f\n', yaw)
+% fprintf('pitch : %.10f\n', pitch)
+% fprintf('row : %.10f\n', row)
+% fprintf('x : %.10f\n', T(1))
+% fprintf('y : %.10f\n', T(2))
+% fprintf('z : %.10f\n\n', T(3))
 % 
-%     [R,T] = least_squares_fitting(apex_1, apex_2);
-%     angles = rot2ang(R);
-%     yaw = [yaw angles(1)];
-%     pitch = [pitch angles(2)];
-%     row = [row angles(3)];
-%     ts = [ts T];
-% end
-% disp('20 Apex Points')
-% m_yaw = mean(yaw)*180/pi
-% m_pitch = mean(pitch)*180/pi
-% m_row = mean(row)*180/pi
-% std_yaw = std(yaw)*180/pi
-% std_pitch = std(pitch)*180/pi
-% std_row = std(row)*180/pi
-% m_T = [mean(ts(1,:)) ; mean(ts(2,:)) ; mean(ts(3,:))]
-% std_T = [std(ts(1,:)) ; std(ts(2,:)) ; std(ts(3,:))]
-% hold off
-% figure(3)
+% fprintf('===========================================================\n')
+% 
 % [R,T] = least_squares_fitting(l1_apexes, l2_apexes);
-% l2_transform = R'*(l2_apexes - repmat(T,1,length(l2_apexes)));
-% plot3(l1_apexes(1,:), l1_apexes(2,:), l1_apexes(3,:),'r*'); hold on; grid on;
-% plot3(l2_transform(1,:), l2_transform(2,:), l2_transform(3,:),'g*');
+% angles = rot2ang(R);
+% yaw = angles(1)*180/pi;
+% pitch = angles(2)*180/pi;
+% row = angles(3)*180/pi;
+% fprintf('yaw : %.10f\n', yaw)
+% fprintf('pitch : %.10f\n', pitch)
+% fprintf('row : %.10f\n', row)
+% fprintf('x : %.10f\n', T(1))
+% fprintf('y : %.10f\n', T(2))
+% fprintf('z : %.10f\n\n', T(3))

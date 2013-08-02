@@ -25,31 +25,44 @@ clc;
 
 % Grab apex data paths and dirs
 avg_data_path = '~/Documents/laser_calibration/Data/Average/';
-tests = dir('~/Documents/laser_calibration/Data/Average/*_*');
+tests = dir('~/Documents/laser_calibration/Data/Average/2013*_*');
 
 % Iterate through each apex test subdir
 for test = tests'
     test_path = strcat(avg_data_path, test.name);
+
     
     % Fetch all lidar pose files within this dir
     l1_files = dir(strcat(avg_data_path, test.name, '/l1_pose_*'));
     l2_files = dir(strcat(avg_data_path, test.name, '/l2_pose_*'));
     
-    % Compile lidar one apex data for this test
-    for file = l1_files'
-        avg = dlmread(strcat(test_path, '/',file.name), ',')
-        [inter] = segment_lines(avg);
-        [apex] = calculate_apex(inter);
-        write_apex(test.name, file.name, apex)
-    end
     
-    % Compile lidar two apex data for this test
-    for file = l2_files'
+    % Compile lidar one apex data for this test
+    intersections = zeros(2,3); count = 0; file_name = 'l1_pose';
+    for file = l1_files'
+        count = count + 1;
         avg = dlmread(strcat(test_path, '/',file.name), ',');
         [inter] = segment_lines(avg);
-        [apex] = calculate_apex(inter);
-        write_apex(test.name, file.name, apex)
+        intersections = intersections + inter;
     end
+    
+    intersections = intersections / count;
+    [apex] = calculate_apex(intersections);
+    write_apex(test.name, file_name, apex);
+    
+    % Compile lidar two apex data for this test
+    intersections = zeros(2,3); count = 0; file_name = 'l2_pose';
+    for file = l2_files'
+        count = count + 1;
+        avg = dlmread(strcat(test_path, '/',file.name), ',');
+        [inter] = segment_lines(avg);
+        intersections = intersections + inter;
+    end
+    
+    intersections = intersections / count;
+    [apex] = calculate_apex(intersections);
+    write_apex(test.name, file_name, apex);
+    
 end
 
 

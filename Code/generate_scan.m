@@ -62,9 +62,9 @@ for i = 1:num_scans
     % Convert polar to Cartesian coordinates 
     [x_pos y_pos] = pol2cart(theta,data.range);
     if strcmp(lidar_no, 'l1' )
-       mask = (-170 < y_pos) & (y_pos < 70) & (30 < x_pos) & (x_pos < 300);
+       mask = (-30 < y_pos) & (y_pos < 100) & (0 < x_pos) & (x_pos < 250);
     else
-       mask = (-70 < y_pos) & (y_pos < 170) & (50 < x_pos) & (x_pos < 320);
+       mask = (-60 < y_pos) & (y_pos < 180) & (50 < x_pos) & (x_pos < 320);
     end
 
     x_pos = x_pos(mask);
@@ -86,7 +86,7 @@ clear sicklms;
 
 scans_x = data_x;
 scans_y = data_y;
-
+% figure()
 % plot(scans_y, scans_x, 'ko')
 
 end % function generate_scan

@@ -66,7 +66,7 @@ intersect_two = intersection(line_two,line_three);
 intersect_three = intersection(line_three,line_four);
 
 % Combine intersection points and lines into arrays
-intersections = [intersect_one intersect_two intersect_three];
+intersections = [intersect_one intersect_two intersect_three]
 lines = [line_one line_two line_three line_four];
 
 %==========================================================================
