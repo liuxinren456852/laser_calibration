@@ -151,17 +151,16 @@ Included Data
 
 Currently there exists raw, average, and apex data for the following transformations between two SICK LMs 200 Lidars:
 
-- Y Translation
-- X, Y Translation
-- X, Y, Z Translation
-- X, Y Tranlsation & Yaw Rotation
-- X, Y, Z Translation & Yaw Rotation
-- X, Y, Z Translation & Yaw, Pitch Rotation
-- X, Y, Z Translation & Yaw, Pitch, Roll Rotation
-
-- Distance (Y) Translation Limitation Testing
-- Angle of Target Limitation Testing
-- Height of Target Limitation Testing
+- Y Translation  
+- X, Y Translation  
+- X, Y, Z Translation  
+- X, Y Tranlsation & Yaw Rotation  
+- X, Y, Z Translation & Yaw Rotation  
+- X, Y, Z Translation & Yaw, Pitch Rotation  
+- X, Y, Z Translation & Yaw, Pitch, Roll Rotation  
+- Distance (Y) Translation Limitation Testing  
+- Angle of Target Limitation Testing  
+- Height of Target Limitation Testing  
 
 
 Contact
