@@ -1,5 +1,5 @@
 Lidar Calibration for Use with Mobile Robotics
-==============================================
+====================================
 
 Justin Cosentino, Mili Shah, and Roger Eastman  
 National Institute of Technology  
@@ -84,13 +84,13 @@ target, and optimize a homogenous transformation is stored with the Code
 directory. See each file for more specific descriptions of their 
 functionality. The SICK to Matlab bridge used was the sicktoolbox, which 
 can be downloaded from http://sicktoolbox.sourceforge.net. Installation and
-connection instructions can also be found on the aforementioned webpage.
+connection instructions can also be found on the aforementioned web page.
 
 Usage
 -----
 
 First, power on the two SICK LMS 2xx lidars. Once the lidars have booted
-up, connect them to the computer via serial-to-USB adapaters and run  
+up, connect them to the computer via serial-to-USB adapters and run  
 
     dmesg
     
@@ -129,7 +129,7 @@ into a subdirectory (eg. translation_x). This must be done in all 3
 directories, as specific functions will iterate over subfolders and pull
 data from all folders named in the YYYYMMDD_POSE-NUM format. In order to
 perform additional testing on this data, one should move it from the
-associated apex subdirecty to the Apex folder, perform analysis, and then
+associated apex subdirectory to the Apex folder, perform analysis, and then
 move the data back into its subdirectory. 
 
 Once apex data has been collected, one can calculate the 
@@ -144,7 +144,7 @@ data from multiple lidar positions or old data that you do not want to use
 
 There exists functions that read all average data within the Average directory
 and calculate and save new apex data. This can be used to recalculate apex data
-after a change to linefitting or data segmentation.
+after a change to line fitting or data segmentation.
 
 Included Data
 -------------
@@ -155,7 +155,7 @@ transformations between two SICK LMs 200 Lidars:
 - Y Translation  
 - X, Y Translation  
 - X, Y, Z Translation  
-- X, Y Tranlsation & Yaw Rotation  
+- X, Y Translation & Yaw Rotation  
 - X, Y, Z Translation & Yaw Rotation  
 - X, Y, Z Translation & Yaw, Pitch Rotation  
 - X, Y, Z Translation & Yaw, Pitch, Roll Rotation  
@@ -167,7 +167,7 @@ Design of Experiment Example
 ----------------------------
 
 See the following link for an example of a statistical design of 
-experiment used for determing the effectiveness of this method:
+experiment used for determining the effectiveness of this method:
 
 https://docs.google.com/document/d/1moAm9RoFyEXCCiOv3lJogkNrMHWG_vOntVbNpSvxDf8/edit?usp=sharing
 
@@ -175,5 +175,6 @@ https://docs.google.com/document/d/1moAm9RoFyEXCCiOv3lJogkNrMHWG_vOntVbNpSvxDf8/
 Contact
 -------
 Please contact justintcosentino (at) gmail (dot) com for additional information.
+
 
 
