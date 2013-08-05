@@ -3,11 +3,10 @@ Lidar Calibration for Use with Mobile Robotics
 
 Justin Cosentino, Mili Shah, and Roger Eastman  
 National Institute of Technology  
-July, 2013  
+Summer, 2013  
 
 Background 
-----------
-
+----------------
 This repository contains code and data used to calibrate two 3D real-time 
 laser range sensors. Using a specially designed target that allows for the
 determination of a lidar's full 6DOF pose, we find the coordinate change 
@@ -20,49 +19,51 @@ submitted to either ICRA or CPVR that details our methods and the target
 design.
 
 Dependencies
------------
+--------------------
 - Matlab, which may be purchased from http://www.mathworks.com/products/matlab/.  
 - The sicktoolbox, which may be downloaded from http://sicktoolbox.sourceforge.net.
-- Winged target
+- Specifically designed winged-target
 
 Installation
-------------
+---------------
 After installing Matlab and the sicktoolbox, simply clone this repository 
 and add the code directory to your Matlab path. At this point, the programs
-may be run through Matlab. See the Usage Section for instructions on how to
+may be run through Matlab. See the Usage Section for specific instructions on how to
 use this package.
 
 File System
------------
-
-There are two main directories within this repository: Data and Code. The 
-Code directory contains all relevant functions for collecting lidar data, 
-calculating the optimal transformation between two targets, and performing
-statistical analysis. The Data directory contains various subdirectories 
-that store raw scans, the average of these scans, and apex calculations.
-With these subdirectories additional data relating to specific tests are 
-stored. For example, with the Data/Apex/ there exists various 
-subdirectories related to translation testing of a known ground truth. 
-The ground truth related to each test can be found within these 
-directories' READMEs. Data from each pose is stored within the three Data
-subdirectories: Apex, Average, and Raw. It is assumed that data within this
-each directory relates to a specific transformation between the two lidars,
-and the importance of this will be discussed within the Usage section. Data
-related to each pose is stored within the following format: 
+----------------
+Within this repository there are three directories: Data/, Code/, and Figures/. The Data directory contains apex calculations, scan averages, and raw scan data in the sub-directories Apex/, Average/, and Raw/. There exist sub-sub-directories that contain calculations and data for specific lidar transformations within each of the three sub-directories. This sub-sub-directories contain a README that details the ground truth related to the given transformation, as well as various pose directories named in the following format:
 
     YYYYMMDD_POSE-NUM
-    
-This signifies that the data within this directory was taken on MM DD, YYYY 
-and relates to pose number POSE-NUM. Within these directories there exist 
+
+such that the data was taken on MM DD, YYYY and corresponds to the POSE-NUM pose of the target. Within these directories there exist 
 actual data files, stored as comma-separated values (CSV). The naming 
 convention is as follows:
 
     LIDAR-NUM_pose_SCAN-NUM
-    
-For each pose (which is signified by the parent directory) there should exist
-5 of these CSV data files. As mentioned above, each file corresponds to lidar 
-LIDAR-NUM and contains data from the SCAN-NUM scan.
 
+Each file corresponds to the SCAN-NUM scan of the lidar LIDAR-NUM for the given pose. For each pose, there should exist five data files per lidar. Here is an example of how data would be stored:
+
+Data  
+--| Apex  
+------| transform_1  
+----------| 20130805_1  
+--------------| l1_pose_1  
+--------------| l2_pose_2  
+--------------| ...  
+--------------| l1_pose_5  
+--------------| l1_pose_5  
+----------| 20130805_2  
+----------| ...  
+----------| 20130805_20  
+------| transform_2  
+------| transform_3  
+--| Average  
+------| ...  
+--| Raw  
+------| ...  
+  
 Raw data is stored as matrix A of X and Y data from k scans such that
 
     A = [scan_1x ; scan_1y; scan_2x ; scan_2y ; ... ; scan_kx ; scan_ky].
@@ -79,12 +80,11 @@ Lastly, Apex data is stored as a point P such that:
     P = [x ; y ; z]
     
 and P represents the apex point relative to the lidar's coordinate frame. 
+
 The Matlab code used to retrieve scan data, calculate the apex of the 
-target, and optimize a homogenous transformation is stored with the Code 
+target, and optimize a homogenous transformation is stored with the Code/ 
 directory. See each file for more specific descriptions of their 
-functionality. The SICK to Matlab bridge used was the sicktoolbox, which 
-can be downloaded from http://sicktoolbox.sourceforge.net. Installation and
-connection instructions can also be found on the aforementioned web page.
+functionality. The Figure/ file contains figures and images used within my presentation.
 
 Usage
 -----
