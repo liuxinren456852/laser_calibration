@@ -21,15 +21,15 @@ design.
 Dependencies
 --------------------
 - Matlab, which may be purchased from http://www.mathworks.com/products/matlab/.  
-- The sicktoolbox, which may be downloaded from http://sicktoolbox.sourceforge.net.
+- The sicktoolbox, which may be downloaded from http://sicktoolbox.sourceforge.net. View documentaion for installtion instructions. The usb-to-serial adapters used to connect the lidar to the computer are described within the sicktoolbox documentation.
 - Specifically designed winged-target
+- This guide assumes that one is using Ubuntu 12.04 LTS
 
 Installation
 ---------------
 After installing Matlab and the sicktoolbox, simply clone this repository 
 and add the code directory to your Matlab path. At this point, the programs
-may be run through Matlab. See the Usage Section for specific instructions on how to
-use this package.
+may be run through Matlab. See the Usage Section for specific instructions on how to use this package.
 
 File System
 ----------------
@@ -45,24 +45,24 @@ convention is as follows:
 
 Each file corresponds to the SCAN-NUM scan of the lidar LIDAR-NUM for the given pose. For each pose, there should exist five data files per lidar. Here is an example of how data would be stored:
 
-Data  
---| Apex  
-------| transform_1  
-----------| 20130805_1  
---------------| l1_pose_1  
---------------| l2_pose_2  
---------------| ...  
---------------| l1_pose_5  
---------------| l1_pose_5  
-----------| 20130805_2  
-----------| ...  
-----------| 20130805_20  
-------| transform_2  
-------| transform_3  
---| Average  
-------| ...  
---| Raw  
-------| ...  
+    Data  
+    --| Apex  
+    ------| transform_1  
+    ----------| 20130805_1  
+    --------------| l1_pose_1  
+    --------------| l2_pose_2  
+    --------------| ...  
+    --------------| l1_pose_5  
+    --------------| l1_pose_5  
+    ----------| 20130805_2  
+    ----------| ...  
+    ----------| 20130805_20  
+    ------| transform_2  
+    ------| transform_3  
+    --| Average  
+    ------| ...  
+    --| Raw  
+    ------| ...  
   
 Raw data is stored as matrix A of X and Y data from k scans such that
 
@@ -87,8 +87,7 @@ directory. See each file for more specific descriptions of their
 functionality. The Figure/ file contains figures and images used within my presentation.
 
 Usage
------
-
+---------
 First, power on the two SICK LMS 2xx lidars. Once the lidars have booted
 up, connect them to the computer via serial-to-USB adapters and run  
 
@@ -107,42 +106,33 @@ sicktoolbox specs used are as follows:
 
 Upon connecting the lidars, place the winged target in front of the SICKs
 such that each face of the target is within view of the lidars. In order
-to college data, run the following command: 
+to collect data, run the following command: 
 
-    generate_data('/dev/ttyUSB0','/dev/ttyUSB1', 500000, 30, 1, true)
+    generate_data('/dev/ttyUSB0','/dev/ttyUSB1', 500000, 30, 1, true, transformation_name)
 
 which is of the form
 
-    generate_data(DEV_PATH_1, DEV_PATH_2, BAUD, SCANS, TEST, WRITE_FLAG)
+    generate_data(DEV_PATH_1, DEV_PATH_2, BAUD, SCANS, TEST, WRITE_FLAG, TRANSFORMATION_NAME)
 
 This collects raw data, averages the raw data accounting for shot data, 
 segments the data, fits lines to the segmented data, and calculated the
 apex of the target. If the write_flag is set to true, the raw, average,
-and apex data will be saved in the manner described within the File
-System section. 
+and apex data will be saved within the following files, respectively:
 
-It is assumed that all folders within the Apex, Average, and Raw
-directories named in the YYYYMMDD_POSE-NUM manner are associated with
-a specifc transformation between the two lidars. If the transformation
-between the two lidars is changed, one should move the associated data
-into a subdirectory (eg. translation_x). This must be done in all 3
-directories, as specific functions will iterate over subfolders and pull
-data from all folders named in the YYYYMMDD_POSE-NUM format. In order to
-perform additional testing on this data, one should move it from the
-associated apex subdirectory to the Apex folder, perform analysis, and then
-move the data back into its subdirectory. 
+    ~/Documents/laser_calibration/Data/Raw/transformation_name/.
+    ~/Documents/laser_calibration/Data/Average/transformation_name/.
+    ~/Documents/laser_calibration/Data/Apex/transformation_name/.
+
+Within these directories data will be saved in the aforementationed format. 
 
 Once apex data has been collected, one can calculate the 
 optimal transformation between the two lidars using:
 
-    calculate_r_t()
+    calculate_r_t(n, transformation_name)
 
-Note: 
-- Running this command will iterate through all apex data. If you have 
-data from multiple lidar positions or old data that you do not want to use
-within your calculations, move this data into a new folder (eg. 
-"Data/Apex/Old") to ignore it.
+where n is the max number of apexes and transformation_name is the name of the directory in which the cu
 
+Note:  
 - Background subtraction can be changed within the generate_scan function.
 Currently, the lidar ignores all data outside of a given region, so merely update
 the mask defined within this function to fit a range in which the target may be
@@ -155,6 +145,24 @@ location, simply change the paths within this function.
 There exists functions that read all average data within the Average directory
 and calculate and save new apex data. This can be used to recalculate apex data
 after a change to line fitting or data segmentation.
+
+Example Usage
+-------------
+- Postition lidars
+- Power on lidars
+- Connect lidars to computer
+- Collect apex data, changing the target's pose after each run
+
+    generate_data('/dev/ttyUSB0','/dev/ttyUSB1', 500000, 30,  1, true, transformation_name)
+    generate_data('/dev/ttyUSB0','/dev/ttyUSB1', 500000, 30,  2, true, transformation_name)
+    ...
+    generate_data('/dev/ttyUSB0','/dev/ttyUSB1', 500000, 30, 20, true, transformation_name)
+
+- Calculate the transformation between the two lidars, determining the optimal R and T using 3-N apexes
+
+
+    calculate_r_t(20, transformation_name)
+
 
 Included Data
 -------------
