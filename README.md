@@ -137,15 +137,20 @@ optimal transformation between the two lidars using:
 
     calculate_r_t()
 
-Note: Running this command will iterate through all apex data. If you have
+Note: 
+- Running this command will iterate through all apex data. If you have 
 data from multiple lidar positions or old data that you do not want to use
- within your calculations, move this data into a new folder (eg. 
+within your calculations, move this data into a new folder (eg. 
 "Data/Apex/Old") to ignore it.
 
-Notes: Background subtraction can be changed within the generate_scan function.
+- Background subtraction can be changed within the generate_scan function.
 Currently, the lidar ignores all data outside of a given region, so merely update
 the mask defined within this function to fit a range in which the target may be
 found.
+
+- The write_data function assumes that data will be written to 
+~/Documents/laser_calibration/Data/*. If you wish to save the data to another 
+location, simply change the paths within this function. 
 
 There exists functions that read all average data within the Average directory
 and calculate and save new apex data. This can be used to recalculate apex data
