@@ -149,7 +149,8 @@ after a change to linefitting or data segmentation.
 Included Data
 -------------
 
-Currently there exists raw, average, and apex data for the following transformations between two SICK LMs 200 Lidars:
+Currently there exists raw, average, and apex data for the following 
+transformations between two SICK LMs 200 Lidars:
 
 - Y Translation  
 - X, Y Translation  
@@ -161,6 +162,14 @@ Currently there exists raw, average, and apex data for the following transformat
 - Distance (Y) Translation Limitation Testing  
 - Angle of Target Limitation Testing  
 - Height of Target Limitation Testing  
+
+Design of Experiment Example
+----------------------------
+
+See the following link for an example of a statistical design of 
+experiment used for determing the effectiveness of this method:
+
+https://docs.google.com/document/d/1moAm9RoFyEXCCiOv3lJogkNrMHWG_vOntVbNpSvxDf8/edit?usp=sharing
 
 
 Contact
