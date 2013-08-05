@@ -1,4 +1,4 @@
-function [l1_apexes, l2_apexes] =  read_apex_data()
+function [l1_apexes, l2_apexes] =  read_apex_data(dir_name)
 %==========================================================================
 %==========================================================================
 %
@@ -6,7 +6,7 @@ function [l1_apexes, l2_apexes] =  read_apex_data()
 %  Auth: Justin Cosentino
 %  Date: 10 July 2013
 %
-%  In:  none
+%  In:  dir_name - name of directory containing apex data
 %
 %  Out: l1_apexes - a 3xN matrix containing all apex data from lidar one
 %       l2_apexes - a 3xN matrix containing all apex data from lidar two
@@ -27,16 +27,16 @@ clc;
 l1_apexes = []; l2_apexes = [];
 
 % Grab apex data paths and dirs
-apex_data_path = '~/Documents/laser_calibration/Data/Apex/';
-tests = dir('~/Documents/laser_calibration/Data/Apex/*_*');
+apex_data_path = strcat('~/Documents/laser_calibration/Data/Apex/',dir_name,'/');
+tests = dir(strcat(apex_data_path, '*_*'));
 
 % Iterate through each apex test subdir
 for test = tests'
     test_path = strcat(apex_data_path, test.name);
     
     % Fetch all lidar pose files within this dir
-    l1_files = dir(strcat(apex_data_path, test.name, '/l1_pose*'));
-    l2_files = dir(strcat(apex_data_path, test.name, '/l2_pose*'));
+    l1_files = dir(strcat(apex_data_path, test.name, '/l1_pose_*'));
+    l2_files = dir(strcat(apex_data_path, test.name, '/l2_pose_*'));
     
     % Compile lidar one apex data for this test
     for file = l1_files'

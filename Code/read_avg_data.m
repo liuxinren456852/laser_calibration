@@ -1,4 +1,4 @@
-function read_avg_data()
+function read_avg_data(dir_name)
 %==========================================================================
 %==========================================================================
 %
@@ -6,7 +6,7 @@ function read_avg_data()
 %  Auth: Justin Cosentino
 %  Date: 10 July 2013
 %
-%  In:  file_path - path to file containing average scan data
+%  In:  dir_name - directory containing average scan data
 %
 %  Out: avg_x - x coordinate data read from file
 %       avg_y - y coordinate data read from file
@@ -24,8 +24,8 @@ function read_avg_data()
 clc;
 
 % Grab apex data paths and dirs
-avg_data_path = '~/Documents/laser_calibration/Data/Average/';
-tests = dir('~/Documents/laser_calibration/Data/Average/2013*_*');
+avg_data_path = strcat('~/Documents/laser_calibration/Data/Average/',dir_name,'/');
+tests = dir(strcat(avg_data_path,'2013*_*'));
 
 % Iterate through each apex test subdir
 for test = tests'
@@ -47,8 +47,8 @@ for test = tests'
     end
     
     intersections = intersections / count;
-    [apex] = calculate_apex(intersections);
-    write_apex(test.name, file_name, apex);
+    [apex] = calculate_apex(intersections)
+    %write_apex(test.name, file_name, apex);
     
     % Compile lidar two apex data for this test
     intersections = zeros(2,3); count = 0; file_name = 'l2_pose';
@@ -60,8 +60,8 @@ for test = tests'
     end
     
     intersections = intersections / count;
-    [apex] = calculate_apex(intersections);
-    write_apex(test.name, file_name, apex);
+    [apex] = calculate_apex(intersections)
+    %write_apex(test.name, file_name, apex);
     
 end
 
