@@ -1,5 +1,5 @@
 function generate_data(sick_path_1, sick_path_2, sick_baud, num_scans, ...
-    test_num, write_flag)
+    test_num, write_flag, dir_name)
 %==========================================================================
 %==========================================================================
 %
@@ -13,6 +13,8 @@ function generate_data(sick_path_1, sick_path_2, sick_baud, num_scans, ...
 %        num_scans      - Desired number of laser scans
 %        test_num       - The test number (for file-writing; > 0)
 %        write_flag     - Boolean determining if data is written to file
+%        dir_name       - directory name in which avg, apex, and raw data
+%                         will be saved
 %
 %  Out:  None
 %  
@@ -29,7 +31,7 @@ function generate_data(sick_path_1, sick_path_2, sick_baud, num_scans, ...
 clc; clf; close all;
 
 % Check for input params
-narginchk(6,6)
+narginchk(7,7)
 
 % Take 15 pose measurements, with a 5 second pause in between tests to
 % allow for target adjustment
@@ -77,9 +79,9 @@ for pose_num=1:5
    
     % Write all data to csv files
     if write_flag
-         write_data('l1', test_num, pose_num, num_scans, ...
+         write_data('l1', dir_name, test_num, pose_num, num_scans, ...
                     l1_scans_x, l1_scans_y, l1_avg, l1_apex)
-         write_data('l2', test_num, pose_num, num_scans, ...
+         write_data('l2', dir_name, test_num, pose_num, num_scans, ...
                     l2_scans_x, l2_scans_y, l2_avg, l2_apex)
     end 
     

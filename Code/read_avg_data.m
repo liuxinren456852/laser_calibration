@@ -38,43 +38,33 @@ for test = tests'
     
     
     % Compile lidar one apex data for this test
-    intersections = zeros(2,3); count = 0; file_name = 'l1_pose';
     for file = l1_files'
-        count = count + 1;
         avg = dlmread(strcat(test_path, '/',file.name), ',');
         [inter] = segment_lines(avg);
-        intersections = intersections + inter;
+        [apex] = calculate_apex(inter);
+        write_apex(test.name, file.name, dir_name, apex)
     end
-    
-    intersections = intersections / count;
-    [apex] = calculate_apex(intersections)
-    %write_apex(test.name, file_name, apex);
     
     % Compile lidar two apex data for this test
-    intersections = zeros(2,3); count = 0; file_name = 'l2_pose';
     for file = l2_files'
-        count = count + 1;
         avg = dlmread(strcat(test_path, '/',file.name), ',');
         [inter] = segment_lines(avg);
-        intersections = intersections + inter;
+        [apex] = calculate_apex(inter);
+        write_apex(test.name, file.name, dir_name, apex)
     end
-    
-    intersections = intersections / count;
-    [apex] = calculate_apex(intersections)
-    %write_apex(test.name, file_name, apex);
     
 end
 
 
 %==========================================================================
 %==========================================================================
-function write_apex(test_name,file_name,apex)
+function write_apex(test_name,file_name, dir_name, apex)
 %==========================================================================
 % Func: write_apex()
 % Desc: Writes apex data to file system
 %==========================================================================
 
-new_dir = sprintf('~/Documents/laser_calibration/Data/Apex/%s/',test_name);
+new_dir = sprintf('~/Documents/laser_calibration/Data/Apex/%s/%s/',dir_name,test_name);
 if ~exist(new_dir,'dir'), mkdir(new_dir); end
 path = sprintf('%s%s', new_dir, file_name);
 if ~exist(path,'file')

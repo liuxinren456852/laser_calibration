@@ -1,4 +1,4 @@
-function  write_data(lidar_num, test_num, pose_num, num_scans, ...
+function  write_data(lidar_num, dir_name, test_num, pose_num, num_scans,...
     raw_x, raw_y, avg_data, apex)
 %==========================================================================
 %==========================================================================
@@ -15,7 +15,8 @@ function  write_data(lidar_num, test_num, pose_num, num_scans, ...
 %        raw_y     - Raw scan data of y coordinates
 %        avg_data  - Averaged data across all scans
 %        apex      - The apex pose calcuated with least squares
-%
+%        dir_name  - directory name in which avg, apex, and raw data
+%                    will be saved
 %  Out:  None
 %   
 %  Desc: Writes all data to file system
@@ -33,9 +34,9 @@ data(1:2:end,:) = raw_x;
 data(2:2:end,:) = raw_y;
 
 file = sprintf('%s_%d', datestr(date,'yyyymmdd'), test_num);
-dir = sprintf('~/Documents/laser_calibration/Data/Raw/%s/', file)
+dir = sprintf('~/Documents/laser_calibration/Data/Raw/%s/%s/', dir_name, file)
 if ~exist(dir,'dir'), mkdir(dir); end
-path = sprintf('%s%s_pose_%d', dir, lidar_num, pose_num)
+path = sprintf('%s%s_pose_%d', dir, lidar_num, pose_num);
 if ~exist(path,'file')
     dlmwrite(path,data,'delimiter', ',','precision', 7);
 else
@@ -44,7 +45,7 @@ end
 
 % Save avg x and y data
 file = sprintf('%s_%d', datestr(date,'yyyymmdd'), test_num);
-dir = sprintf('~/Documents/laser_calibration/Data/Average/%s/', file);
+dir = sprintf('~/Documents/laser_calibration/Data/Average/%s/%s/', dir_name, file)
 if ~exist(dir,'dir'), mkdir(dir); end
 path = sprintf('%s%s_pose_%d', dir, lidar_num, pose_num);
 if ~exist(path,'file')
@@ -55,7 +56,7 @@ end
 
 % Write apex to data file if the designated scan does not already exist
 file = sprintf('%s_%d', datestr(date,'yyyymmdd'), test_num);
-dir = sprintf('~/Documents/laser_calibration/Data/Apex/%s/', file);
+dir = sprintf('~/Documents/laser_calibration/Data/Apex/%s/%s/', dir_name, file)
 if ~exist(dir,'dir'), mkdir(dir); end
 path = sprintf('%s%s_pose_%d', dir, lidar_num, pose_num);
 if ~exist(path,'file')

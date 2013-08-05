@@ -1,4 +1,4 @@
-function [r t] =  calculate_r_t(maxNum)
+function [r t] =  calculate_r_t(maxNum, dir)
 %==========================================================================
 %==========================================================================
 %
@@ -6,7 +6,8 @@ function [r t] =  calculate_r_t(maxNum)
 %  Auth: Justin Cosentino
 %  Date: 10 July 2013
 %
-%  In:  none
+%  In:  maxNum - The maximum number of apexes used in calcuations
+%       dir   - The dirrectory containing apex data
 %
 %  Out: R - optimal rotation calculated by least squares algortthm
 %       T - optimal translation calcuated by least squares algorithm
@@ -21,7 +22,7 @@ function [r t] =  calculate_r_t(maxNum)
 clc; close all; clf;
 
 % Initialize Variables
-[l1_apexes l2_apexes] = read_apex_data();
+[l1_apexes l2_apexes] = read_apex_data(dir);
 yaw = []; pitch = []; row=[]; ts= [];
 
 % Rotation and translation std

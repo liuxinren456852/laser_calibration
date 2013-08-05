@@ -62,9 +62,9 @@ for i = 1:num_scans
     % Convert polar to Cartesian coordinates 
     [x_pos y_pos] = pol2cart(theta,data.range);
     if strcmp(lidar_no, 'l1' )
-       mask = (-30 < y_pos) & (y_pos < 100) & (0 < x_pos) & (x_pos < 250);
+       mask = (-100 < y_pos) & (y_pos < 100) & (0 < x_pos) & (x_pos < 200);
     else
-       mask = (-60 < y_pos) & (y_pos < 180) & (50 < x_pos) & (x_pos < 320);
+       mask = (-100 < y_pos) & (y_pos < 100) & (0 < x_pos) & (x_pos < 200);
     end
 
     x_pos = x_pos(mask);
