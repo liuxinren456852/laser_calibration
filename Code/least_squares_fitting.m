@@ -1,6 +1,6 @@
 %==========================================================================
 %==========================================================================
-function [guess_r, guess_t]= least_squares_fitting(p, p_hat)
+function [guess_r, guess_t, sigma]= least_squares_fitting(p, p_hat)
 %==========================================================================
 %
 %  File: least_squares_fitting.m
@@ -36,7 +36,9 @@ q = p - repmat(centroid_a, 1, num_points);
 q_hat = p_hat - repmat(centroid_b, 1, num_points);
 
 % Calculate 3x3 matrix and find rotation
-H = q * q_hat'; [U,S,V] = svd(H); guess_r = V*U';
+H = q * q_hat';
+[U,S,V] = svd(H);
+guess_r = V*U';
 if det(guess_r) < 0, guess_r = V*diag([1, 1, -1])*U'; end
 guess_r;
 

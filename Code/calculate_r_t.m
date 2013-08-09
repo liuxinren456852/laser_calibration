@@ -27,7 +27,6 @@ yaw = []; pitch = []; row=[]; ts= [];
 
 % Rotation and translation std
 std_r = []; std_t = []; m_r = []; m_t = [];
-
 % Possible number of poses
 numPoses = size(l1_apexes,2)/5;
 possible_poses = 1:numPoses;
@@ -85,9 +84,8 @@ for numPoints = 3:maxNum
     end 
         
     
-    yaw = []; pitch = []; row=[]; ts= [];
-
-    
+    yaw = []; pitch = []; row=[]; ts= []; sigmas = [];
+        
 end
 
 % Plot standard deviation (Rotation)
@@ -132,13 +130,10 @@ plot([3:maxNum], m_t(:,3), 'g-*')
 ylabel('Mean (mm)');
 xlabel('Apex Points');
 title('Translation Mean');
-legend('x', 'y', 'z');
+legend('x', 'y', 'z')
 
-figure(2)
-plot3(l1_apexes(1,:), l1_apexes(2,:), l1_apexes(3,:),'r*'); hold on; grid on;
-plot3(l2_apexes(1,:), l2_apexes(2,:), l2_apexes(3,:),'g*');
-
-figure(3)
+figure()
+hold on; grid on;
 [R,T] = least_squares_fitting(l1_apexes, l2_apexes);
 l2_transform = R'*(l2_apexes - repmat(T,1,length(l2_apexes)));
 plot3(l1_apexes(1,:), l1_apexes(2,:), l1_apexes(3,:),'r*'); hold on; grid on;
@@ -154,32 +149,3 @@ ang(1) = atan2(R(2,1),R(1,1));
 ang(2) = atan2(-R(3,1),sqrt(R(3,2)^2+R(3,3)^2));
 ang(3) = atan2(R(3,2),R(3,3));
 end
-
-
-% fprintf('===========================================================\n')
-% 
-% [R,T] = least_squares_fitting(l1_apexes(:,25:75), l2_apexes(:,25:75));
-% angles = rot2ang(R);
-% yaw = angles(1)*180/pi;
-% pitch = angles(2)*180/pi;
-% row = angles(3)*180/pi;
-% fprintf('yaw : %.10f\n', yaw)
-% fprintf('pitch : %.10f\n', pitch)
-% fprintf('row : %.10f\n', row)
-% fprintf('x : %.10f\n', T(1))
-% fprintf('y : %.10f\n', T(2))
-% fprintf('z : %.10f\n\n', T(3))
-% 
-% fprintf('===========================================================\n')
-% 
-% [R,T] = least_squares_fitting(l1_apexes, l2_apexes);
-% angles = rot2ang(R);
-% yaw = angles(1)*180/pi;
-% pitch = angles(2)*180/pi;
-% row = angles(3)*180/pi;
-% fprintf('yaw : %.10f\n', yaw)
-% fprintf('pitch : %.10f\n', pitch)
-% fprintf('row : %.10f\n', row)
-% fprintf('x : %.10f\n', T(1))
-% fprintf('y : %.10f\n', T(2))
-% fprintf('z : %.10f\n\n', T(3))
